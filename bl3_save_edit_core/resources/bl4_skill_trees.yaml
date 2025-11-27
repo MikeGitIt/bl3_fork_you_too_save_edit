@@ -1,0 +1,4415 @@
+characters:
+  -
+    id: "amon"
+    display_name: "Amon"
+    trees:
+      -
+        name: "Crucible"
+        action_skills:
+          - "Crucible"
+          - "Tempered Pyre"
+          - "Tempered Ice"
+          - "Masterwork"
+          - "Tempered Lightning"
+          - "Escalation"
+        skills:
+          -
+            name: "Cast Iron"
+            type: "Passive Skill"
+            required_points: 0
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Forgeskill Cooldown Rate"
+                value: "+5%"
+              -
+                stat: "Gun Handling"
+                value: "+6%"
+          -
+            name: "Gathering Storm"
+            type: "Kill Skill"
+            required_points: 0
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Elemental Damage"
+                value: "+3% /stack"
+          -
+            name: "Executioner"
+            type: "Passive Skill"
+            required_points: 0
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Critical Hit Damage"
+                value: "+4%"
+          -
+            name: "Get the Lead Out"
+            type: "Passive Skill"
+            required_points: 0
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Reload Speed"
+                value: "+4%"
+          -
+            name: "Destruction Engine"
+            type: "Passive Skill"
+            required_points: 5
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Forgeskill Damage"
+                value: "+6%"
+              -
+                stat: "Detonation Damage"
+                value: "+8%"
+          -
+            name: "Axe and Stone"
+            type: "Augment"
+            required_points: 5
+            max_points: 1
+            required_skill: "Crucible"
+            stats: []
+          -
+            name: "Tempered Pyre"
+            type: "Forgedrone Skill"
+            required_points: 5
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Axe Forgedrone Damage"
+                value: "223"
+          -
+            name: "Endless War"
+            type: "Augment"
+            required_points: 5
+            max_points: 1
+            required_skill: "Crucible"
+            stats: []
+          -
+            name: "Bolt Action"
+            type: "Passive Skill"
+            required_points: 5
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Bonus Shock Damage"
+                value: "+6%"
+          -
+            name: "Bellows"
+            type: "Passive Skill"
+            required_points: 10
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Gun Damage"
+                value: "+7%"
+          -
+            name: "Twin Tempers"
+            type: "Passive Skill"
+            required_points: 10
+            max_points: 1
+            required_skill: "Tempered Pyre"
+            stats: []
+          -
+            name: "Vital Organs"
+            type: "Kill Skill"
+            required_points: 10
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Critical Hit Chance"
+                value: "+2% /stack"
+          -
+            name: "Herald's Call"
+            type: "Passive Skill"
+            required_points: 10
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Shock Damage"
+                value: "+6%"
+          -
+            name: "Tempered Ice"
+            type: "Forgedrone Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Hammer Forgedrone Damage"
+                value: "290"
+          -
+            name: "Hour of the Hammer"
+            type: "Augment"
+            required_points: 15
+            max_points: 1
+            required_skill: "Crucible"
+            stats: []
+          -
+            name: "Cacophany"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Ordnance Damage"
+                value: "+5%"
+              -
+                stat: "Detonation Radius"
+                value: "+7%"
+          -
+            name: "Masterwork"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: "Tempered Ice"
+            stats:
+              -
+                stat: "Forgedrone Damage"
+                value: "+10%"
+              -
+                stat: "Forgedrone Duration"
+                value: "+8%"
+          -
+            name: "Endless Bombardment"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Ordnance Refund Chance"
+                value: "6%"
+          -
+            name: "Stoked"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Fire Rate"
+                value: "+2% /stack"
+          -
+            name: "Ordained Hammer"
+            type: "Passive Skill"
+            required_points: 25
+            max_points: 1
+            required_skill: "Masterwork"
+            stats:
+              -
+                stat: "Detonation Chance"
+                value: "25%"
+          -
+            name: "Snowmaul"
+            type: "Capstone"
+            required_points: 25
+            max_points: 1
+            required_skill: "Crucible"
+            stats: []
+          -
+            name: "Blast Furnace"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Damage Dealt"
+                value: "+0.25% /stack"
+          -
+            name: "Blade Tempest"
+            type: "Augment"
+            required_points: 15
+            max_points: 1
+            required_skill: "Crucible"
+            stats: []
+          -
+            name: "Tempered Lightning"
+            type: "Forgedrone Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Sword Forgedrone Damage"
+                value: "178"
+          -
+            name: "Armor of Contempt"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Overshield"
+                value: "3%"
+          -
+            name: "Lightning Rod"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Elemental Bolt Damage"
+                value: "40% of crit"
+          -
+            name: "Escalation"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: "Tempered Lightning"
+            stats:
+              -
+                stat: "Forgedrone Attack Speed"
+                value: "+5%"
+              -
+                stat: "Forgedrone Move Speed"
+                value: "+5%"
+          -
+            name: "Storm Surge"
+            type: "Capstone"
+            required_points: 25
+            max_points: 1
+            required_skill: "Crucible"
+            stats: []
+          -
+            name: "Honed Point"
+            type: "Passive Skill"
+            required_points: 25
+            max_points: 3
+            required_skill: "Escalation"
+            stats:
+              -
+                stat: "Forgedrone Crit Chance"
+                value: "+5%"
+              -
+                stat: "Action Skill Cooldown Restored"
+                value: "+2%"
+          -
+            name: "Permafrost"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Cryo Hazard Damage/s"
+                value: "321"
+          -
+            name: "Searing Cold"
+            type: "Augment"
+            required_points: 15
+            max_points: 1
+            required_skill: "Crucible"
+            stats: []
+          -
+            name: "Raging Inferno"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Critical Hit Chance"
+                value: "+3%"
+              -
+                stat: "Burn Damage/s"
+                value: "12% of dmg"
+          -
+            name: "Wildheart"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 3
+            required_skill: null
+            stats:
+              -
+                stat: "Status Effect Damage"
+                value: "+11%"
+              -
+                stat: "Hazard Damage"
+                value: "+11%"
+          -
+            name: "Freezer Burn"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Cryo Damage"
+                value: "+8%"
+              -
+                stat: "Incendiary Damage"
+                value: "+8%"
+          -
+            name: "Reactive Armor"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Shield Restore"
+                value: "+7%"
+              -
+                stat: "Ordnance Cooldown Rate"
+                value: "+6%"
+          -
+            name: "Reverse Explosion"
+            type: "Passive Skill"
+            required_points: 25
+            max_points: 1
+            required_skill: null
+            stats: []
+          -
+            name: "Conflangarang"
+            type: "Capstone"
+            required_points: 25
+            max_points: 1
+            required_skill: "Crucible"
+            stats: []
+      -
+        name: "Scourge"
+        action_skills:
+          - "Scourge"
+          - "Burning Rage"
+          - "Worldbreaker"
+          - "Icy Rage"
+          - "Winter's Kiss"
+          - "Thunderous Rage"
+          - "Strike the Anvil"
+        skills:
+          -
+            name: "Wrath of Nature"
+            type: "Passive Skill"
+            required_points: 0
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Status Effect Chance"
+                value: "+7.5%"
+              -
+                stat: "Cryo Effectiveness"
+                value: "+7.5%"
+          -
+            name: "Scorched Kairos"
+            type: "Passive Skill"
+            required_points: 0
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Ordnance Damage"
+                value: "+6%"
+              -
+                stat: "Magazine Size"
+                value: "+6%"
+          -
+            name: "The Thrill"
+            type: "Passive Skill"
+            required_points: 0
+            max_points: 3
+            required_skill: null
+            stats:
+              -
+                stat: "Missing Health Regeneration"
+                value: "+2%"
+              -
+                stat: "Missing Health Regeneration"
+                value: "+10% /stack"
+          -
+            name: "Battleborn"
+            type: "Passive Skill"
+            required_points: 0
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Gun Damage"
+                value: "up to +4%"
+          -
+            name: "Eternal"
+            type: "Passive Skill"
+            required_points: 5
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Action Skill Duration"
+                value: "+5%"
+              -
+                stat: "Swap Speed"
+                value: "+6.666%"
+          -
+            name: "Blastchill"
+            type: "Augment"
+            required_points: 5
+            max_points: 1
+            required_skill: "Scourge"
+            stats: []
+          -
+            name: "Tail of the Comet"
+            type: "Passive Skill"
+            required_points: 5
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Cryo Damage/s"
+                value: "12% of hit"
+          -
+            name: "Cryonic Thrum"
+            type: "Augment"
+            required_points: 5
+            max_points: 1
+            required_skill: "Scourge"
+            stats: []
+          -
+            name: "Scar Tissue"
+            type: "Passive Skill"
+            required_points: 5
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Maximum Health"
+                value: "+9%"
+              -
+                stat: "Repkit Healing"
+                value: "+9%"
+          -
+            name: "Bullet Hail"
+            type: "Passive Skill"
+            required_points: 10
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Chance"
+                value: "4%"
+          -
+            name: "Machinist"
+            type: "Kill Skill"
+            required_points: 10
+            max_points: 3
+            required_skill: null
+            stats:
+              -
+                stat: "Ordnance Cooldown Restored"
+                value: "7%"
+          -
+            name: "Ancient Ways"
+            type: "Passive Skill"
+            required_points: 10
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Cryo Damage"
+                value: "+6%"
+          -
+            name: "Warrior's Cup"
+            type: "Passive Skill"
+            required_points: 10
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Action Skill Duration Restored"
+                value: "6%"
+          -
+            name: "Wildfire"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Ricochet Damage"
+                value: "+5%"
+              -
+                stat: "Burn Damage"
+                value: "+5%"
+              -
+                stat: "Burn Duration"
+                value: "+5%"
+          -
+            name: "Molten Rebuke"
+            type: "Augment"
+            required_points: 15
+            max_points: 1
+            required_skill: "Scourge"
+            stats: []
+          -
+            name: "Burning Rage"
+            type: "Kill Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Reload Speed"
+                value: "+0.8% /stack"
+              -
+                stat: "Action Skill Cooldown Rate"
+                value: "+1.2% /stack"
+          -
+            name: "Ballistic Bulwark"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Overshield"
+                value: "3%"
+          -
+            name: "Disco Infernus"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Fire Rate"
+                value: "+2% /stack"
+          -
+            name: "Worldbreaker"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: "Burning Rage"
+            stats:
+              -
+                stat: "Damage"
+                value: "1071"
+          -
+            name: "Ring of Frostfire"
+            type: "Capstone"
+            required_points: 25
+            max_points: 1
+            required_skill: "Scourge"
+            stats: []
+          -
+            name: "Cooling Mantle"
+            type: "Kill Skill"
+            required_points: 25
+            max_points: 1
+            required_skill: "Worldbreaker"
+            stats: []
+          -
+            name: "Icy Rage"
+            type: "Kill Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Gun Damage"
+                value: "+1.25% /stack"
+          -
+            name: "Eternal Winter"
+            type: "Augment"
+            required_points: 15
+            max_points: 1
+            required_skill: "Scourge"
+            stats: []
+          -
+            name: "Northern Wind"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Slow Chance"
+                value: "3%"
+          -
+            name: "Winter's Kiss"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: "Icy Rage"
+            stats:
+              -
+                stat: "Damage"
+                value: "+10%"
+          -
+            name: "Primal Surge"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Shield Restored"
+                value: "3%"
+              -
+                stat: "Ammo Restored"
+                value: "6%"
+          -
+            name: "Age of Ice"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Frozen: Damage"
+                value: "+6%"
+          -
+            name: "Caroming Shard"
+            type: "Passive Skill"
+            required_points: 25
+            max_points: 3
+            required_skill: "Winter's Kiss"
+            stats:
+              -
+                stat: "Ricochet Chance"
+                value: "7%"
+          -
+            name: "Glacial Rapture"
+            type: "Capstone"
+            required_points: 25
+            max_points: 1
+            required_skill: "Scourge"
+            stats: []
+          -
+            name: "Blackout"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Ordnance: Crit Chance"
+                value: "3%"
+              -
+                stat: "Bonus Shock Damage/s"
+                value: "+15%"
+          -
+            name: "Stormlance"
+            type: "Augment"
+            required_points: 15
+            max_points: 1
+            required_skill: "Scourge"
+            stats: []
+          -
+            name: "Thunderous Rage"
+            type: "Kill Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Critical Hit Damage"
+                value: "+1.25% /stack"
+          -
+            name: "Tactician"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Hip-Fire: Fire Rate"
+                value: "+4%"
+              -
+                stat: "Hip-Fire: Gun Handling"
+                value: "-6%"
+              -
+                stat: "Aiming: Gun Damage"
+                value: "+5%"
+              -
+                stat: "Aiming: Gun Handling"
+                value: "+6%"
+          -
+            name: "Smelter"
+            type: "Kill Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Forgeskill Cooldown Restored"
+                value: "3%"
+          -
+            name: "Strike the Anvil"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: "Thunderous Rage"
+            stats:
+              -
+                stat: "Damage"
+                value: "15%"
+          -
+            name: "Wrathfall"
+            type: "Capstone"
+            required_points: 25
+            max_points: 1
+            required_skill: "Scourge"
+            stats: []
+          -
+            name: "High Voltage"
+            type: "Passive Skill"
+            required_points: 25
+            max_points: 1
+            required_skill: "Strike the Anvil"
+            stats: []
+      -
+        name: "Onslaughter"
+        action_skills:
+          - "Onslaughter"
+          - "Berserk"
+          - "Maiming Strike"
+        skills:
+          -
+            name: "Impetus"
+            type: "Kill Skill"
+            required_points: 0
+            max_points: 3
+            required_skill: null
+            stats:
+              -
+                stat: "Shield Recharge Rate"
+                value: "+5% /stack"
+              -
+                stat: "Move Speed"
+                value: "+3% /stack"
+          -
+            name: "What Burns Within"
+            type: "Passive Skill"
+            required_points: 0
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Incendiary Damage"
+                value: "+6%"
+          -
+            name: "Discombobulate"
+            type: "Passive Skill"
+            required_points: 0
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Melee Critical Hit Chance"
+                value: "+5%"
+          -
+            name: "Heavy Plate"
+            type: "Passive Skill"
+            required_points: 0
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Maximum Shield Capacity"
+                value: "+7%"
+              -
+                stat: "Maximum Overshield Capacity"
+                value: "+9%"
+          -
+            name: "Wield the Storm"
+            type: "Passive Skill"
+            required_points: 5
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Status Effect Damage"
+                value: "+7%"
+              -
+                stat: "Status Effect Duration"
+                value: "+7%"
+          -
+            name: "Pyroclast"
+            type: "Kill Skill Augment"
+            required_points: 5
+            max_points: 1
+            required_skill: "Onslaughter"
+            stats: []
+          -
+            name: "Gut Punch"
+            type: "Passive Skill"
+            required_points: 5
+            max_points: 3
+            required_skill: null
+            stats:
+              -
+                stat: "Melee Chance"
+                value: "20%"
+              -
+                stat: "Ordnance Chance"
+                value: "10%"
+          -
+            name: "Thermal Diffusion"
+            type: "Augment"
+            required_points: 5
+            max_points: 1
+            required_skill: "Onslaughter"
+            stats: []
+          -
+            name: "Tritanium Knuckles"
+            type: "Passive Skill"
+            required_points: 5
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Melee Damage"
+                value: "+8%"
+              -
+                stat: "Skill Damage"
+                value: "+4%"
+          -
+            name: "Forged in Steel"
+            type: "Passive Skill"
+            required_points: 10
+            max_points: 1
+            required_skill: null
+            stats: []
+          -
+            name: "Bullet Storm"
+            type: "Passive Skill"
+            required_points: 10
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Gun Damage"
+                value: "+1.5% /stack"
+          -
+            name: "Metal Urge"
+            type: "Passive Skill"
+            required_points: 10
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Action Skill Cooldown Rate"
+                value: "+0.5% /stack"
+          -
+            name: "The Best Defense"
+            type: "Passive Skill"
+            required_points: 10
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Overshield"
+                value: "3%"
+          -
+            name: "Berserk"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Bonus Cryo Damage"
+                value: "+6%"
+          -
+            name: "Fellfrost"
+            type: "Augment"
+            required_points: 15
+            max_points: 1
+            required_skill: "Onslaughter"
+            stats: []
+          -
+            name: "Bloodlust"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Reload Speed"
+                value: "+6%"
+              -
+                stat: "Lifesteal"
+                value: "+3%"
+          -
+            name: "There is only Red"
+            type: "Kill Skill"
+            required_points: 20
+            max_points: 3
+            required_skill: "Berserk"
+            stats:
+              -
+                stat: "Bonus Cryo Damage"
+                value: "+20% /kill"
+              -
+                stat: "Max Bonus Cryo Damage"
+                value: "200%"
+          -
+            name: "Rimebreak"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 3
+            required_skill: null
+            stats:
+              -
+                stat: "Shield Restored"
+                value: "15%"
+              -
+                stat: "Damage"
+                value: "1785"
+          -
+            name: "Brimming Vigor"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Maximum Health Capacity"
+                value: "+7%"
+              -
+                stat: "Melee Damage (@full)"
+                value: "+7%"
+          -
+            name: "My Touch is Death"
+            type: "Passive Skill"
+            required_points: 25
+            max_points: 3
+            required_skill: null
+            stats:
+              -
+                stat: "Chance"
+                value: "+8%"
+          -
+            name: "Hoarcleave"
+            type: "Capstone"
+            required_points: 25
+            max_points: 1
+            required_skill: "Onslaughter"
+            stats: []
+          -
+            name: "Into the Fray"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Damage Dealt"
+                value: "up to +5%"
+              -
+                stat: "Damage Reduction"
+                value: "up to +14%"
+          -
+            name: "Force of Nature"
+            type: "Augment"
+            required_points: 15
+            max_points: 1
+            required_skill: "Onslaughter"
+            stats: []
+          -
+            name: "Burning Ramparts"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Fire Rate"
+                value: "up to +4%"
+              -
+                stat: "Status Effect Chance"
+                value: "up to +8%"
+          -
+            name: "Harbinger"
+            type: "Kill Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Melee Damage"
+                value: "+2% /stack"
+              -
+                stat: "Maximum Shield Capacity"
+                value: "+2% /stack"
+          -
+            name: "Rearm"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 3
+            required_skill: null
+            stats:
+              -
+                stat: "Ammo Refill"
+                value: "+20%"
+          -
+            name: "Maiming Strike"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 3
+            required_skill: null
+            stats:
+              -
+                stat: "Weakness Chance"
+                value: "8%"
+          -
+            name: "Molten Roil"
+            type: "Capstone"
+            required_points: 25
+            max_points: 1
+            required_skill: "Onslaughter"
+            stats: []
+          -
+            name: "Mortal Flare"
+            type: "Passive Skill"
+            required_points: 25
+            max_points: 3
+            required_skill: "Maiming Strike"
+            stats:
+              -
+                stat: "Damage"
+                value: "2008"
+          -
+            name: "Catastrophe"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Critical Hit Chance"
+                value: "+1% /stack"
+              -
+                stat: "Critical Hit Damage"
+                value: "+2% /stack"
+          -
+            name: "Fulminating Fist"
+            type: "Augment"
+            required_points: 15
+            max_points: 1
+            required_skill: "Onslaughter"
+            stats: []
+          -
+            name: "Dragon's Breath"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Damage Dealt"
+                value: "+20%"
+          -
+            name: "Judgment"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Melee Damage"
+                value: "+10%"
+          -
+            name: "Fists of Stone"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Forgeskill Cooldown Restored"
+                value: "1%"
+          -
+            name: "Crackling Aegis"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 3
+            required_skill: null
+            stats:
+              -
+                stat: "Status Effect Damage"
+                value: "up to +8%"
+              -
+                stat: "Ordnance Damage"
+                value: "up to +8%"
+          -
+            name: "Electrical Fire"
+            type: "Passive Skill"
+            required_points: 25
+            max_points: 1
+            required_skill: null
+            stats: []
+          -
+            name: "Stormcutter"
+            type: "Capstone"
+            required_points: 25
+            max_points: 1
+            required_skill: "Onslaughter"
+            stats: []
+  -
+    id: "harlowe"
+    display_name: "Harlowe"
+    trees:
+      -
+        name: "Flux Generator"
+        action_skills:
+          - "Flux Generator"
+          - "Neutron Decay"
+          - "Harlowe's Certainty Principle"
+          - "Gamma Ray Burst"
+        skills:
+          -
+            name: "Mains Hum"
+            type: "Passive Skill"
+            required_points: 0
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Maximum Shield Capacity"
+                value: "+5%"
+              -
+                stat: "Maximum Overshield Capacity"
+                value: "+10%"
+          -
+            name: "Personal Observation"
+            type: "Passive Skill"
+            required_points: 0
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Melee Damage"
+                value: "+6%"
+              -
+                stat: "Entanglement Chance"
+                value: "+6%"
+          -
+            name: "Action at a Distance"
+            type: "Passive Skill"
+            required_points: 0
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Status Effect Chance"
+                value: "+10%"
+          -
+            name: "Momentum"
+            type: "Passive Skill"
+            required_points: 0
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Critical Hit Damage"
+                value: "+5%"
+          -
+            name: "Mass Function"
+            type: "Passive Skill"
+            required_points: 5
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Reload Speed"
+                value: "+3% /Entangled enemy"
+          -
+            name: "Coronal Mass Ejection"
+            type: "Augment"
+            required_points: 5
+            max_points: 1
+            required_skill: "Flux Generator"
+            stats: []
+          -
+            name: "Neutron Decay"
+            type: "Passive Skill"
+            required_points: 5
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Gun Damage"
+                value: "+2% /stack"
+          -
+            name: "Blue Giant"
+            type: "Augment"
+            required_points: 5
+            max_points: 1
+            required_skill: "Flux Generator"
+            stats: []
+          -
+            name: "Heat Death"
+            type: "Passive Skill"
+            required_points: 5
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Cryo Efficiency"
+                value: "+10%"
+          -
+            name: "Creative Overflow"
+            type: "Passive Skill"
+            required_points: 10
+            max_points: 3
+            required_skill: null
+            stats:
+              -
+                stat: "Gun Damage"
+                value: "up to +12%"
+          -
+            name: "Resonance Cascade"
+            type: "Passive Skill"
+            required_points: 10
+            max_points: 3
+            required_skill: "Neutron Decay"
+            stats:
+              -
+                stat: "Action Skill Damage"
+                value: "+3% /stack"
+          -
+            name: "Confirmative Reality"
+            type: "Passive Skill"
+            required_points: 10
+            max_points: 3
+            required_skill: null
+            stats:
+              -
+                stat: "Action Skill Cooldown"
+                value: "+0.5% /shot"
+          -
+            name: "Absolute Zero"
+            type: "Passive Skill"
+            required_points: 10
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Duration"
+                value: "+0.8s"
+          -
+            name: "Blue Shift"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Bonus Cryo Damage"
+                value: "+10%"
+              -
+                stat: "Bonus Radiation Damage"
+                value: "+10%"
+          -
+            name: "Unified Theory"
+            type: "Augment"
+            required_points: 15
+            max_points: 1
+            required_skill: "Flux Generator"
+            stats: []
+          -
+            name: "Decoherence"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Entangled Enemy: Bonus Damage"
+                value: "+5%"
+              -
+                stat: "Flux Generator Enemy: Bonus Damage"
+                value: "+3%"
+          -
+            name: "Latent Charge"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Bonus Damage"
+                value: "up to +10%"
+          -
+            name: "Feedback Loop"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Action Skill Damage"
+                value: "+2% /stack"
+              -
+                stat: "Action Skill Duration"
+                value: "+2% /stack"
+              -
+                stat: "Action Skill Cooldown Rate"
+                value: "+2% /stack"
+          -
+            name: "Potential Transference"
+            type: "Capstone"
+            required_points: 25
+            max_points: 1
+            required_skill: "Flux Generator"
+            stats: []
+          -
+            name: "Runaway Reaction"
+            type: "Passive Skill"
+            required_points: 25
+            max_points: 1
+            required_skill: null
+            stats:
+              -
+                stat: "Status Effect Chance"
+                value: "+25%"
+          -
+            name: "Gamma Ray Burst"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Bonus Radiation Damage"
+                value: "up to +10% Max-Shield"
+          -
+            name: "Nuclear Winter"
+            type: "Augment"
+            required_points: 15
+            max_points: 1
+            required_skill: "Flux Generator"
+            stats: []
+          -
+            name: "Harlowe's Certainty Principle"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Gun Handling"
+                value: "+10%"
+              -
+                stat: "Bonus Gun Handling"
+                value: "+3% /enemy"
+          -
+            name: "Jaunt"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 1
+            required_skill: null
+            stats: []
+          -
+            name: "Critical Funding"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: "Harlowe's Certainty Principle"
+            stats:
+              -
+                stat: "Bonus Gun Handling"
+                value: "+1 on Crit"
+          -
+            name: "Exposed Core"
+            type: "Passive Skill"
+            required_points: 25
+            max_points: 1
+            required_skill: "Gamma Ray Burst"
+            stats:
+              -
+                stat: "Status Effect Chance"
+                value: "+20%"
+          -
+            name: "Violent Horizon"
+            type: "Capstone"
+            required_points: 25
+            max_points: 1
+            required_skill: "Flux Generator"
+            stats: []
+          -
+            name: "Meltdown"
+            type: "Passive Skill"
+            required_points: 25
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Bonus Radiation Damage"
+                value: "+8%"
+          -
+            name: "Refraction"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Ricochet Chance"
+                value: "+6%"
+          -
+            name: "Perpetual Engine"
+            type: "Augment"
+            required_points: 15
+            max_points: 1
+            required_skill: "Flux Generator"
+            stats: []
+          -
+            name: "Excited State"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Critical Hit Damage"
+                value: "+7%"
+          -
+            name: "Accretion"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Lifesteal"
+                value: "+3%"
+          -
+            name: "Distribution Function"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Shield Restore"
+                value: "+6% of Damage dealt"
+          -
+            name: "Pencils Down"
+            type: "Passive Skill"
+            required_points: 25
+            max_points: 3
+            required_skill: null
+            stats:
+              -
+                stat: "Reload Speed"
+                value: "+7%"
+              -
+                stat: "Fire Rate"
+                value: "+7%"
+          -
+            name: "Group Study"
+            type: "Capstone"
+            required_points: 25
+            max_points: 1
+            required_skill: "Flux Generator"
+            stats: []
+          -
+            name: "Annihilation"
+            type: "Passive Skill"
+            required_points: 25
+            max_points: 1
+            required_skill: null
+            stats: []
+      -
+        name: "Zero-Point"
+        action_skills:
+          - "Zero-Point"
+          - "Negative Entropy"
+          - "Periodic Table Flip"
+          - "Force of Will"
+          - "Experimentation"
+        skills:
+          -
+            name: "Quantum Immortality"
+            type: "Passive Skill"
+            required_points: 0
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Health Regeneration"
+                value: "+1%"
+          -
+            name: "Parallel Circuit"
+            type: "Passive Skill"
+            required_points: 0
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Gun Damage"
+                value: "+6%"
+          -
+            name: "Pulse Drive"
+            type: "Passive Skill"
+            required_points: 0
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Action Skill Cooldown Rate"
+                value: "+5%"
+          -
+            name: "Make Extraordinary"
+            type: "Passive Skill"
+            required_points: 0
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Skill Crit Chance"
+                value: "+2%"
+              -
+                stat: "Extra Skill Crit Chance"
+                value: "+1% /stack"
+          -
+            name: "Bright Future"
+            type: "Passive Skill"
+            required_points: 5
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Fire Rate"
+                value: "+6%"
+          -
+            name: "Strange Attractor"
+            type: "Augment"
+            required_points: 5
+            max_points: 1
+            required_skill: "Zero-Point"
+            stats: []
+          -
+            name: "Negative Entropy"
+            type: "Passive Skill"
+            required_points: 5
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Gun Handling"
+                value: "+13%"
+          -
+            name: "Peer Review"
+            type: "Augment"
+            required_points: 5
+            max_points: 1
+            required_skill: "Zero-Point"
+            stats: []
+          -
+            name: "Periodic Table Flip"
+            type: "Passive Skill"
+            required_points: 5
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Elemental Damage"
+                value: "+4%"
+              -
+                stat: "Status Effect Chance"
+                value: "+4%"
+              -
+                stat: "Cryo Effectiveness"
+                value: "+4%"
+          -
+            name: "Ripple Effect"
+            type: "Kill Skill"
+            required_points: 10
+            max_points: 1
+            required_skill: null
+            stats:
+              -
+                stat: "Nearby Enemies"
+                value: "+1,3"
+          -
+            name: "Precision Engineering"
+            type: "Passive Skill"
+            required_points: 10
+            max_points: 3
+            required_skill: "Negative Entropy"
+            stats:
+              -
+                stat: "Crit Chance"
+                value: "+10%"
+          -
+            name: "Too Coolant for Schoolant"
+            type: "Passive Skill"
+            required_points: 10
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Action Skill Cooldown Rate"
+                value: "+7%"
+          -
+            name: "Cryodynamics"
+            type: "Passive Skill"
+            required_points: 10
+            max_points: 3
+            required_skill: "Periodic Table Flip"
+            stats:
+              -
+                stat: "Cryo Damage"
+                value: "+7%"
+          -
+            name: "Concurrence"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Action Skill Duration"
+                value: "+3% /Entangled enemy"
+          -
+            name: "Wildcat Destabilization"
+            type: "Augment"
+            required_points: 15
+            max_points: 1
+            required_skill: "Zero-Point"
+            stats: []
+          -
+            name: "Force of Will"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Enemy: Move Speed"
+                value: "-10%"
+              -
+                stat: "Enemy: Attack Speed"
+                value: "-10%"
+          -
+            name: "Control Group"
+            type: "Kill Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Action Skill Cooldown Rate"
+                value: "+3%"
+              -
+                stat: "Action Skill Duration"
+                value: "+2%"
+          -
+            name: "Slingshot"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: "Force of Will"
+            stats:
+              -
+                stat: "Move Speed"
+                value: "+8%"
+          -
+            name: "Freeze Frame"
+            type: "Passive Skill"
+            required_points: 25
+            max_points: 1
+            required_skill: null
+            stats:
+              -
+                stat: "Bonus Cryo Damage"
+                value: "+10% /stack"
+          -
+            name: "Falling Bodies"
+            type: "Capstone"
+            required_points: 25
+            max_points: 1
+            required_skill: "Zero-Point"
+            stats: []
+          -
+            name: "Stun Lock"
+            type: "Passive Skill"
+            required_points: 25
+            max_points: 1
+            required_skill: null
+            stats:
+              -
+                stat: "Duration"
+                value: "+5s"
+          -
+            name: "Unstable Ice-otope"
+            type: "Kill Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Bonus Cryo Damage"
+                value: "+7%"
+          -
+            name: "Cold Storage"
+            type: "Augment"
+            required_points: 15
+            max_points: 1
+            required_skill: "Zero-Point"
+            stats: []
+          -
+            name: "Keep Ice on That"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Lifesteal"
+                value: "+3%"
+              -
+                stat: "Overshield Steal"
+                value: "+4%"
+          -
+            name: "Endothermic Reaction"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Damage/s"
+                value: "357"
+              -
+                stat: "Bonus Damage"
+                value: "up to +5%"
+              -
+                stat: "Duration"
+                value: "+2s"
+          -
+            name: "Flash Freeze"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 1
+            required_skill: null
+            stats:
+              -
+                stat: "Freeze Chance"
+                value: "+30%"
+          -
+            name: "Heat Sink"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Action Skill Cooldown Rate"
+                value: "+9%"
+          -
+            name: "Triple Point"
+            type: "Passive Skill"
+            required_points: 25
+            max_points: 1
+            required_skill: null
+            stats: []
+          -
+            name: "Cold Plunge"
+            type: "Capstone"
+            required_points: 25
+            max_points: 1
+            required_skill: "Zero-Point"
+            stats: []
+          -
+            name: "Indiscrete Math"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Splash Damage"
+                value: "+7%"
+          -
+            name: "Inertia"
+            type: "Augment"
+            required_points: 15
+            max_points: 1
+            required_skill: "Zero-Point"
+            stats: []
+          -
+            name: "Experimentation"
+            type: "Kill Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Elemental Explosion Damage"
+                value: "803"
+          -
+            name: "Domino Effect"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 3
+            required_skill: null
+            stats:
+              -
+                stat: "Retrigger Chance"
+                value: "+15%"
+          -
+            name: "Sustained Reaction"
+            type: "Kill Skill"
+            required_points: 20
+            max_points: 3
+            required_skill: null
+            stats:
+              -
+                stat: "Action Skill Duration"
+                value: "+5%"
+          -
+            name: "Ground State"
+            type: "Capstone"
+            required_points: 25
+            max_points: 1
+            required_skill: "Zero-Point"
+            stats: []
+          -
+            name: "Gordian Knot"
+            type: "Kill Skill"
+            required_points: 25
+            max_points: 5
+            required_skill: "Experimentation"
+            stats:
+              -
+                stat: "Restoration Chance"
+                value: "+7%"
+      -
+        name: "CHROMA Accelerator"
+        action_skills:
+          - "CHROMA Accelerator"
+          - "Elementary"
+          - "Carry the One"
+        skills:
+          -
+            name: "Cyclotron"
+            type: "Passive Skill"
+            required_points: 0
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Fire Rate"
+                value: "+4%"
+          -
+            name: "PPE"
+            type: "Passive Skill"
+            required_points: 0
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Maximum Shield Capacity"
+                value: "+6%"
+              -
+                stat: "Shield Recharge Rate"
+                value: "+6%"
+          -
+            name: "Fuzzy Math"
+            type: "Passive Skill"
+            required_points: 0
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Status Effect Chance"
+                value: "+10%"
+          -
+            name: "Field-Ready Prototype"
+            type: "Passive Skill"
+            required_points: 0
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Action Skill Damage"
+                value: "+6%"
+          -
+            name: "Bleeding Edge"
+            type: "Passive Skill"
+            required_points: 5
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Reload Speed"
+                value: "+5%"
+          -
+            name: "Voidstar"
+            type: "Augment"
+            required_points: 5
+            max_points: 1
+            required_skill: "CHROMA Accelerator"
+            stats: []
+          -
+            name: "Neutron Capture"
+            type: "Augment"
+            required_points: 5
+            max_points: 1
+            required_skill: "CHROMA Accelerator"
+            stats: []
+          -
+            name: "Elementary"
+            type: "Passive Skill"
+            required_points: 5
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Elemental Damage"
+                value: "+4%"
+              -
+                stat: "Status Effect Damage"
+                value: "+4%"
+          -
+            name: "Test Subjects"
+            type: "Passive Skill"
+            required_points: 10
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Action Skill Cooldown Rate"
+                value: "+7%"
+          -
+            name: "Get Up and Go"
+            type: "Passive Skill"
+            required_points: 10
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Move Speed"
+                value: "+6%"
+          -
+            name: "Elephant's Foot"
+            type: "Passive Skill"
+            required_points: 10
+            max_points: 1
+            required_skill: null
+            stats:
+              -
+                stat: "Damage"
+                value: "1338"
+          -
+            name: "Great Red DoT"
+            type: "Passive Skill"
+            required_points: 10
+            max_points: 3
+            required_skill: null
+            stats:
+              -
+                stat: "Status Effect Duration"
+                value: "+12%"
+          -
+            name: "Enriched"
+            type: "Passive Skill"
+            required_points: 10
+            max_points: 3
+            required_skill: "Elementary"
+            stats:
+              -
+                stat: "Radiation Damage"
+                value: "+7%"
+          -
+            name: "Practical Applications"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Skill Damage"
+                value: "+7%"
+          -
+            name: "Field Research"
+            type: "Augment"
+            required_points: 15
+            max_points: 1
+            required_skill: "CHROMA Accelerator"
+            stats: []
+          -
+            name: "Carry the One"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Entangle Chance"
+                value: "+10%"
+          -
+            name: "Core Sample"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Lifesteal"
+                value: "+5%"
+          -
+            name: "Break the Ice"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 1
+            required_skill: null
+            stats: []
+          -
+            name: "Opposing Force"
+            type: "Passive Skill"
+            required_points: 25
+            max_points: 3
+            required_skill: null
+            stats:
+              -
+                stat: "Action Skill Cooldown Rate"
+                value: "+4% /stack"
+          -
+            name: "Q-Ball"
+            type: "Capstone"
+            required_points: 25
+            max_points: 1
+            required_skill: "CHROMA Accelerator"
+            stats: []
+          -
+            name: "Cold Welding"
+            type: "Passive Skill"
+            required_points: 25
+            max_points: 3
+            required_skill: "Carry the One"
+            stats:
+              -
+                stat: "Damage/s"
+                value: "625"
+          -
+            name: "Poisoned Sun"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Radiation Damage"
+                value: "+6%"
+              -
+                stat: "Irradiation Chance"
+                value: "+12%"
+          -
+            name: "Special Purpose Magnets"
+            type: "Augment"
+            required_points: 15
+            max_points: 1
+            required_skill: "CHROMA Accelerator"
+            stats: []
+          -
+            name: "Glow Up"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Critical Hit Chance"
+                value: "+5%"
+          -
+            name: "Fissile Launcher"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 3
+            required_skill: null
+            stats:
+              -
+                stat: "Radiation Dart Damage"
+                value: "1071"
+          -
+            name: "Chain Reactor"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 3
+            required_skill: null
+            stats:
+              -
+                stat: "Bonus Radiation Damage"
+                value: "+6%"
+          -
+            name: "Wasted"
+            type: "Kill Skill"
+            required_points: 25
+            max_points: 1
+            required_skill: null
+            stats: []
+          -
+            name: "Demon Core"
+            type: "Capstone"
+            required_points: 25
+            max_points: 1
+            required_skill: "CHROMA Accelerator"
+            stats: []
+          -
+            name: "Dirty Bomb"
+            type: "Passive Skill"
+            required_points: 25
+            max_points: 1
+            required_skill: null
+            stats:
+              -
+                stat: "Radiation Explosion Damage"
+                value: "+40%"
+          -
+            name: "Highly Efficient"
+            type: "Kill Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Shield Capacity Restored"
+                value: "+8%"
+          -
+            name: "Containment Breach"
+            type: "Augment"
+            required_points: 15
+            max_points: 1
+            required_skill: "CHROMA Accelerator"
+            stats: []
+          -
+            name: "Mechanical Brilliance"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Skill Damage"
+                value: "+2% /stack"
+          -
+            name: "Eureka!"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 1
+            required_skill: null
+            stats: []
+          -
+            name: "Rounding Up"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Gun Damage"
+                value: "+2% /stack"
+          -
+            name: "Alternative Fuel Source"
+            type: "Passive Skill"
+            required_points: 25
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Shield Drain"
+                value: "+10%"
+          -
+            name: "The Shattering Light"
+            type: "Capstone"
+            required_points: 25
+            max_points: 1
+            required_skill: "CHROMA Accelerator"
+            stats: []
+          -
+            name: "QED"
+            type: "Melee Override"
+            required_points: 25
+            max_points: 1
+            required_skill: null
+            stats: []
+  -
+    id: "rafa"
+    display_name: "Rafa"
+    trees:
+      -
+        name: "Arc-Knives"
+        action_skills:
+          - "Arc-Knives"
+          - "Dial In"
+          - "El Coraz�n"
+        skills:
+          -
+            name: "Handshake Deal"
+            type: "Passive Skill"
+            required_points: 0
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Gun Damage"
+                value: "+3%"
+              -
+                stat: "Melee Damage"
+                value: "+9%"
+          -
+            name: "Midnight Oil"
+            type: "Passive Skill"
+            required_points: 0
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Bonus Damage/s"
+                value: "+1%"
+          -
+            name: "Expedite"
+            type: "Overdrive Skill"
+            required_points: 0
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Move Speed"
+                value: "+5%"
+          -
+            name: "Dial In"
+            type: "Passive Skill"
+            required_points: 5
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Crit Chance"
+                value: "+3% /stack"
+          -
+            name: "Altered Cabr�n"
+            type: "Augment"
+            required_points: 5
+            max_points: 1
+            required_skill: "Arc-Knives"
+            stats: []
+          -
+            name: "El Coraz�n"
+            type: "Passive Skill"
+            required_points: 5
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Maximum Health Capacity"
+                value: "+7%"
+              -
+                stat: "Maximum Shield Capacity"
+                value: "+14%"
+          -
+            name: "Dead Man Walking"
+            type: "Augment"
+            required_points: 5
+            max_points: 1
+            required_skill: "Arc-Knives"
+            stats: []
+          -
+            name: "Diamond Hands"
+            type: "Passive Skill"
+            required_points: 5
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Gun Damage"
+                value: "+2% /stack"
+          -
+            name: "Saldar"
+            type: "Passive Skill"
+            required_points: 10
+            max_points: 5
+            required_skill: "Dial In"
+            stats:
+              -
+                stat: "Health Restoration"
+                value: "+6%"
+          -
+            name: "In the Zone"
+            type: "Kill Skill"
+            required_points: 10
+            max_points: 3
+            required_skill: null
+            stats:
+              -
+                stat: "Duration"
+                value: "+1s"
+          -
+            name: "To the Last"
+            type: "Passive Skill"
+            required_points: 10
+            max_points: 5
+            required_skill: "El Coraz�n"
+            stats:
+              -
+                stat: "Skill Damage"
+                value: "up to +8%"
+              -
+                stat: "Gun Damage"
+                value: "up to +6%"
+          -
+            name: "Hard Sell"
+            type: "Passive Skill"
+            required_points: 10
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Overshield"
+                value: "10%"
+          -
+            name: "Blowout"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Projectile Damage"
+                value: "446"
+          -
+            name: "Thundercutter"
+            type: "Augment"
+            required_points: 15
+            max_points: 1
+            required_skill: "Arc-Knives"
+            stats: []
+          -
+            name: "El Paraguas"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Splash Damage"
+                value: "+9%"
+              -
+                stat: "Splash Crit Chance"
+                value: "+2%"
+          -
+            name: "Protecto-Pulse"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Max-Shield drain"
+                value: "up to 10%"
+          -
+            name: "Shock Market"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Bonus Shock Damage"
+                value: "+8%"
+          -
+            name: "Liquidation"
+            type: "Passive Skill"
+            required_points: 25
+            max_points: 1
+            required_skill: null
+            stats: []
+          -
+            name: "Hurac�n Especial"
+            type: "Capstone"
+            required_points: 25
+            max_points: 1
+            required_skill: "Arc-Knives"
+            stats: []
+          -
+            name: "Artiller�a"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Ordnance Cooldown Rate"
+                value: "+6%"
+          -
+            name: "Parting Gift"
+            type: "Augment"
+            required_points: 15
+            max_points: 1
+            required_skill: "Arc-Knives"
+            stats: []
+          -
+            name: "Collaborative Ignition"
+            type: "Overdrive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Bonus Damage"
+                value: "+8%"
+          -
+            name: "Booming Business"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Grenade Chance"
+                value: "10%"
+              -
+                stat: "Cooldown Time"
+                value: "12,10,8,6,4,2,0,-2,-4,-6s"
+          -
+            name: "Sinergia"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 3
+            required_skill: null
+            stats:
+              -
+                stat: "Gun Damage"
+                value: "+2% /stack"
+              -
+                stat: "Melee Damage"
+                value: "+4% /stack"
+          -
+            name: "Hemolitions"
+            type: "Overdrive Skill"
+            required_points: 25
+            max_points: 1
+            required_skill: null
+            stats:
+              -
+                stat: "Health Cost"
+                value: "20,10% Current-Health"
+          -
+            name: "Inferno Protocol"
+            type: "Capstone"
+            required_points: 25
+            max_points: 1
+            required_skill: "Arc-Knives"
+            stats: []
+          -
+            name: "El Diablito"
+            type: "Passive Skill"
+            required_points: 25
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Bonus Fire Ordnance Damage"
+                value: "+10%"
+          -
+            name: "El Borracho"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Corrosive Damage"
+                value: "+1% /s"
+          -
+            name: "Acid Drop"
+            type: "Augment"
+            required_points: 15
+            max_points: 1
+            required_skill: "Arc-Knives"
+            stats: []
+          -
+            name: "Empuje"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Action Skill Duration"
+                value: "+7%"
+          -
+            name: "Sustainable Energy"
+            type: "Overdrive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Max-Health Regen/s"
+                value: "up to +0.4%"
+          -
+            name: "Motivar"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Overdrive Duration"
+                value: "+4% /stack"
+          -
+            name: "Galvanic Panic"
+            type: "Capstone"
+            required_points: 25
+            max_points: 1
+            required_skill: "Arc-Knives"
+            stats: []
+          -
+            name: "Cruel Accrual"
+            type: "Passive Skill"
+            required_points: 25
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Skill Damage"
+                value: "+1% /s"
+      -
+        name: "Rinse"
+        action_skills:
+          - "Rinse"
+          - "APOPHIS Lance"
+          - "Arriba"
+          - "Drone Defense"
+          - "Jaque"
+        skills:
+          -
+            name: "Rinse"
+            type: "Passive Skill"
+            required_points: 0
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Reload Speed"
+                value: "+4%"
+          -
+            name: "Las Jaras"
+            type: "Overdrive Skill"
+            required_points: 0
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Ammo Regeneration"
+                value: "+0.5%"
+          -
+            name: "The Thrill"
+            type: "Overdrive Skill"
+            required_points: 0
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Fire Rate"
+                value: "+2%"
+              -
+                stat: "Fire Rate (Overdrive)"
+                value: "+3%"
+          -
+            name: "Preparado"
+            type: "Passive Skill"
+            required_points: 5
+            max_points: 5
+            required_skill: "Rinse"
+            stats:
+              -
+                stat: "Action Skill Cooldown Rate"
+                value: "+3% /stack"
+          -
+            name: "Sangre por Sangre"
+            type: "Augment"
+            required_points: 5
+            max_points: 1
+            required_skill: "APOPHIS Lance"
+            stats:
+              -
+                stat: "Action Skill Cooldown Rate"
+                value: "+25% /charge"
+          -
+            name: "Pa' Dentro"
+            type: "Passive Skill"
+            required_points: 5
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Health Regeneration"
+                value: "+1%"
+          -
+            name: "Battery Subscription Service"
+            type: "Augment"
+            required_points: 5
+            max_points: 1
+            required_skill: "APOPHIS Lance"
+            stats: []
+          -
+            name: "Arriba"
+            type: "Kill Skill"
+            required_points: 5
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Ordnance Cooldown Rate"
+                value: "+7%"
+          -
+            name: "First Impression"
+            type: "Passive Skill"
+            required_points: 10
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Gun Damage"
+                value: "+10%"
+          -
+            name: "Al Centro"
+            type: "Overdrive Skill"
+            required_points: 10
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Gun Handling"
+                value: "+1% /s"
+          -
+            name: "Metal Management"
+            type: "Passive Skill"
+            required_points: 10
+            max_points: 1
+            required_skill: null
+            stats: []
+          -
+            name: "Abajo"
+            type: "Passive Skill"
+            required_points: 10
+            max_points: 5
+            required_skill: "Arriba"
+            stats:
+              -
+                stat: "Action Skill Cooldown Rate"
+                value: "+7%"
+          -
+            name: "Brain Dump"
+            type: "Overdrive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Critical Hit Chance"
+                value: "+3%"
+          -
+            name: "Ojo Rojo"
+            type: "Augment"
+            required_points: 15
+            max_points: 1
+            required_skill: "APOPHIS Lance"
+            stats: []
+          -
+            name: "Conductivo"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Status Effect Chance"
+                value: "+6%"
+              -
+                stat: "Shock Chance"
+                value: "+7%"
+          -
+            name: "El Catr�n"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Bonus Shock Damage"
+                value: "+8%"
+              -
+                stat: "Critical Hit Damage"
+                value: "+8%"
+          -
+            name: "Awe"
+            type: "Passive Skill"
+            required_points: 25
+            max_points: 1
+            required_skill: null
+            stats: []
+          -
+            name: "PROJECT: Raiju"
+            type: "Capstone"
+            required_points: 25
+            max_points: 1
+            required_skill: "APOPHIS Lance"
+            stats: []
+          -
+            name: "Fiesta"
+            type: "Passive Skill"
+            required_points: 25
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Duration"
+                value: "+0.5 s"
+          -
+            name: "Drone Defense"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "STRM Glider Health"
+                value: "2677"
+              -
+                stat: "Corrosive Splash Damage"
+                value: "1785"
+          -
+            name: "Gibistruct Module"
+            type: "Augment"
+            required_points: 15
+            max_points: 1
+            required_skill: "APOPHIS Lance"
+            stats: []
+          -
+            name: "El Soldado"
+            type: "Overdrive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Gun Damage"
+                value: "+6%"
+          -
+            name: "The Right Tools"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Ordnance Damage"
+                value: "+10%"
+          -
+            name: "Debtonation"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Detonator Damage"
+                value: "+357"
+              -
+                stat: "Bonus Damage"
+                value: "+3% /Detonator"
+              -
+                stat: "Splash Radius Scaler"
+                value: "+2% /Detonator"
+          -
+            name: "Drone Assault"
+            type: "Passive Skill"
+            required_points: 25
+            max_points: 1
+            required_skill: "Drone Defense"
+            stats: []
+          -
+            name: "PROJECT: Basilisk"
+            type: "Capstone"
+            required_points: 25
+            max_points: 1
+            required_skill: "APOPHIS Lance"
+            stats: []
+          -
+            name: "Jaque"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Overdrive Bonuses"
+                value: "+0.5% /stack"
+          -
+            name: "Engorged Bore"
+            type: "Augment"
+            required_points: 15
+            max_points: 1
+            required_skill: "APOPHIS Lance"
+            stats: []
+          -
+            name: "La Garza"
+            type: "Overdrive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Weapon Handling"
+                value: "+12%"
+          -
+            name: "Mate"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: "Jaque"
+            stats:
+              -
+                stat: "Cooldown Rate"
+                value: "+3% /stack"
+          -
+            name: "Deadline"
+            type: "Overdrive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Fire Rate"
+                value: "+3%"
+              -
+                stat: "Reload Speed"
+                value: "+5%"
+          -
+            name: "PROJECT: Gorgon"
+            type: "Capstone"
+            required_points: 25
+            max_points: 1
+            required_skill: "APOPHIS Lance"
+            stats: []
+          -
+            name: "Per my Last"
+            type: "Passive Skill"
+            required_points: 25
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Double Damage Chance"
+                value: "+6%"
+      -
+        name: "Peacebreaker Cannons"
+        action_skills:
+          - "Peacebreaker Cannons"
+          - "Concentrated Build Up"
+        skills:
+          -
+            name: "Sitiar"
+            type: "Passive Skill"
+            required_points: 0
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Gun Damage"
+                value: "+5%"
+          -
+            name: "Deft Hands"
+            type: "Passive Skill"
+            required_points: 0
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Fire Rate"
+                value: "+4%"
+          -
+            name: "Shield Barriest"
+            type: "Overdrive Skill"
+            required_points: 0
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Shield Recharge Delay"
+                value: "+8%"
+              -
+                stat: "Shield Recharge Delay"
+                value: "+8%"
+          -
+            name: "Juerga"
+            type: "Passive Skill"
+            required_points: 5
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Action Skill Duration Restore"
+                value: "+3%"
+          -
+            name: "Instinto"
+            type: "Kill Skill Augment"
+            required_points: 5
+            max_points: 1
+            required_skill: "Peacebreaker Cannons"
+            stats: []
+          -
+            name: "Field Repairs"
+            type: "Passive Skill"
+            required_points: 5
+            max_points: 3
+            required_skill: null
+            stats:
+              -
+                stat: "Shields Restored"
+                value: "+15%"
+          -
+            name: "Bullet-Buddy Deluxe"
+            type: "Augment"
+            required_points: 5
+            max_points: 1
+            required_skill: "Peacebreaker Cannons"
+            stats: []
+          -
+            name: "CYA"
+            type: "Kill Skill"
+            required_points: 5
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Shields Restored"
+                value: "+4%"
+          -
+            name: "Resiliencia"
+            type: "Overdrive Skill"
+            required_points: 10
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Damage Reduction"
+                value: "+7.69,14.29,20,25,29.41,33.33,36.84,40,42.86,45.45%"
+          -
+            name: "Maestro"
+            type: "Passive Skill"
+            required_points: 10
+            max_points: 3
+            required_skill: null
+            stats:
+              -
+                stat: "Skill Damage"
+                value: "+9%"
+          -
+            name: "Venganza"
+            type: "Passive Skill"
+            required_points: 10
+            max_points: 1
+            required_skill: null
+            stats: []
+          -
+            name: "El Valiente"
+            type: "Passive Skill"
+            required_points: 10
+            max_points: 3
+            required_skill: null
+            stats:
+              -
+                stat: "Damage Dealt"
+                value: "up to +10%"
+          -
+            name: "Hell in a Shell"
+            type: "Augment"
+            required_points: 15
+            max_points: 1
+            required_skill: "Peacebreaker Cannons"
+            stats: []
+          -
+            name: "Asymmetric Warfare"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Indirect Projectile Damage"
+                value: "+9%"
+          -
+            name: "Errant Spark"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Bonus Fire Damage"
+                value: "+8%"
+          -
+            name: "Hostile Acquisition"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Life Steal"
+                value: "+10%"
+          -
+            name: "Rolling Stone"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Bounce Chance"
+                value: "+7%"
+          -
+            name: "Proprietary Incendiary"
+            type: "Melee Override"
+            required_points: 25
+            max_points: 1
+            required_skill: null
+            stats: []
+          -
+            name: "Double-Ought Autoshot"
+            type: "Capstone"
+            required_points: 25
+            max_points: 1
+            required_skill: "Peacebreaker Cannons"
+            stats: []
+          -
+            name: "Lateral Plinking"
+            type: "Passive Skill"
+            required_points: 25
+            max_points: 1
+            required_skill: null
+            stats:
+              -
+                stat: "Ricochet Chance"
+                value: "+25%"
+          -
+            name: "Confeti"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Bonus Damage"
+                value: "+8%"
+          -
+            name: "Insta-Fort Battle System"
+            type: "Augment"
+            required_points: 15
+            max_points: 1
+            required_skill: "Peacebreaker Cannons"
+            stats: []
+          -
+            name: "Vitriol"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Bonus Corrosive Damage"
+                value: "+11%"
+          -
+            name: "Pain Reaction"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Ricochet Chance"
+                value: "+3% /StatusEffect"
+          -
+            name: "Concentrated Build Up"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Bonus Damage"
+                value: "+2%"
+              -
+                stat: "Additional Bonus Damage"
+                value: "+0.5% /stack"
+          -
+            name: "El Alacr�n"
+            type: "Passive Skill"
+            required_points: 25
+            max_points: 1
+            required_skill: null
+            stats:
+              -
+                stat: "Status Effect Chance"
+                value: "+35%"
+          -
+            name: "Beam Team"
+            type: "Capstone"
+            required_points: 25
+            max_points: 1
+            required_skill: "Peacebreaker Cannons"
+            stats: []
+          -
+            name: "Inspirado"
+            type: "Passive Skill"
+            required_points: 25
+            max_points: 3
+            required_skill: "Concentrated Build Up"
+            stats:
+              -
+                stat: "Action Skill Cooldown Rate"
+                value: "+3%"
+              -
+                stat: "Action Skill Duration Rate"
+                value: "-3%"
+          -
+            name: "Barrage"
+            type: "Overdrive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Splash Damage"
+                value: "+7%"
+          -
+            name: "Unmissable Missiles"
+            type: "Augment"
+            required_points: 15
+            max_points: 1
+            required_skill: "Peacebreaker Cannons"
+            stats: []
+          -
+            name: "Everdrive"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Overdrive Duration"
+                value: "+7%"
+          -
+            name: "Devil-May-Care"
+            type: "Overdrive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Move Speed"
+                value: "+6%"
+              -
+                stat: "Health Regeneration/s"
+                value: "+0.5%"
+              -
+                stat: "Damage Taken"
+                value: "+4%"
+              -
+                stat: "Action Skill Cooldown Rate"
+                value: "+4%"
+          -
+            name: "Temerario"
+            type: "Overdrive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Gun Damage"
+                value: "+1% /s"
+              -
+                stat: "Gun Handling"
+                value: "-1% /s"
+          -
+            name: "Soltado"
+            type: "Kill Skill"
+            required_points: 25
+            max_points: 1
+            required_skill: null
+            stats: []
+          -
+            name: "Volatile Hollowpoints"
+            type: "Capstone"
+            required_points: 25
+            max_points: 1
+            required_skill: "Peacebreaker Cannons"
+            stats: []
+  -
+    id: "vex"
+    display_name: "Vex"
+    trees:
+      -
+        name: "Incarnate"
+        action_skills:
+          - "Incarnate"
+          - "Essence Leech"
+        skills:
+          -
+            name: "Guns and Needles"
+            type: "Kill Skill"
+            required_points: 0
+            max_points: 3
+            required_skill: null
+            stats:
+              -
+                stat: "Repkit Cooldown Restored"
+                value: "+7%"
+          -
+            name: "Volatile Essence"
+            type: "Passive Skill"
+            required_points: 0
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Splash Damage"
+                value: "+4%"
+          -
+            name: "Leeching Attunement"
+            type: "Attune Skill"
+            required_points: 0
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Lifesteal"
+                value: "+2%"
+              -
+                stat: "Reload Speed"
+                value: "+6,12,17,21,25,29,32,35,38,40%"
+          -
+            name: "Grave Sights"
+            type: "Kill Skill"
+            required_points: 0
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Critical Hit Damage"
+                value: "+3% /stack"
+              -
+                stat: "Gun Handling"
+                value: "+3% /stack"
+          -
+            name: "Fiendish Invigoration"
+            type: "Passive Skill"
+            required_points: 5
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Movement Speed"
+                value: "+6%"
+              -
+                stat: "Fire Rate"
+                value: "+6%"
+          -
+            name: "Geistwave"
+            type: "Augment"
+            required_points: 5
+            max_points: 1
+            required_skill: "Incarnate"
+            stats: []
+          -
+            name: "Bloodletter"
+            type: "Passive Skill"
+            required_points: 5
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Damage"
+                value: "+6% /s"
+          -
+            name: "Energy Vampire"
+            type: "Kill Skill Augment"
+            required_points: 5
+            max_points: 1
+            required_skill: "Incarnate"
+            stats: []
+          -
+            name: "Grave Implements"
+            type: "Kill Skill"
+            required_points: 5
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Gun Damage"
+                value: "+4%"
+          -
+            name: "Channeling"
+            type: "Passive Skill"
+            required_points: 10
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Action Skill Duration"
+                value: "+5%"
+              -
+                stat: "Attunement Duration"
+                value: "+7%"
+          -
+            name: "Material Components"
+            type: "Passive Skill"
+            required_points: 10
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Kinetic Damage"
+                value: "+7%"
+              -
+                stat: "Kinetic Status Effect Damage"
+                value: "+4%"
+          -
+            name: "Grave Power"
+            type: "Passive Skill"
+            required_points: 10
+            max_points: 3
+            required_skill: null
+            stats:
+              -
+                stat: "Kill Skill Max Stacks"
+                value: "+1"
+          -
+            name: "Target Prescience"
+            type: "Passive Skill"
+            required_points: 10
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Gun Critical Hit Chance"
+                value: "+3%"
+          -
+            name: "Radiant Attunement"
+            type: "Attune Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Splash Damage"
+                value: "+7%"
+              -
+                stat: "Maximum Shield Capacity"
+                value: "+8%"
+          -
+            name: "Iron Maiden"
+            type: "Augment"
+            required_points: 15
+            max_points: 1
+            required_skill: "Incarnate"
+            stats:
+              -
+                stat: "Shield Restoration"
+                value: "25%"
+              -
+                stat: "Increased Damage"
+                value: "15%"
+          -
+            name: "Conjunction"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Gun Damage (full Shield)"
+                value: "+6%"
+              -
+                stat: "Damage Reduction (1 Health)"
+                value: "16.7,28.6,37.5,44.4,50,54.5,58.3,61.5,64.3,66.7%"
+          -
+            name: "Dreadlight"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Hazard Damage"
+                value: "535 /s"
+          -
+            name: "Restorative Tonic"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 3
+            required_skill: null
+            stats:
+              -
+                stat: "Shield Regeneration"
+                value: "+4%"
+          -
+            name: "Full Moon"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Action Skill Cooldown Rate (full Shield)"
+                value: "+6%"
+              -
+                stat: "Ordnance Cooldown Rate (full Shield)"
+                value: "+6%"
+          -
+            name: "Havoc"
+            type: "Passive Skill"
+            required_points: 25
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Radiation Damage"
+                value: "+8%"
+              -
+                stat: "Radiation Status Effect Damage"
+                value: "+6%"
+          -
+            name: "Desecration"
+            type: "Capstone"
+            required_points: 25
+            max_points: 1
+            required_skill: "Incarnate"
+            stats: []
+          -
+            name: "Drink Full"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Fire Rate"
+                value: "+0.12% /stack"
+          -
+            name: "Witchy Trigger Finger"
+            type: "Augment"
+            required_points: 15
+            max_points: 1
+            required_skill: "Incarnate"
+            stats: []
+          -
+            name: "Keen Mind"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Skill Critical Hit Chance"
+                value: "+3%"
+          -
+            name: "Phase Pocket"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 3
+            required_skill: null
+            stats:
+              -
+                stat: "Magazine Size"
+                value: "+10%"
+              -
+                stat: "Gun Switch Speed"
+                value: "+12,22,30%"
+          -
+            name: "Mortal Terror"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Chance"
+                value: "+1%"
+          -
+            name: "Grave Elements"
+            type: "Kill Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Elemental Damage"
+                value: "+1% /stack"
+          -
+            name: "Vibe Check"
+            type: "Capstone"
+            required_points: 25
+            max_points: 1
+            required_skill: "Incarnate"
+            stats: []
+          -
+            name: "Strike Me Down"
+            type: "Passive Skill"
+            required_points: 25
+            max_points: 1
+            required_skill: null
+            stats: []
+          -
+            name: "Grave Vitality"
+            type: "Kill Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Maximum Health Capacity"
+                value: "+1% /stack"
+              -
+                stat: "Health Regeneration"
+                value: "+0.1% /stack"
+          -
+            name: "Grave Harvest"
+            type: "Kill Skill Augment"
+            required_points: 15
+            max_points: 1
+            required_skill: "Incarnate"
+            stats: []
+          -
+            name: "Ars Arcana"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Skill Damage"
+                value: "+9%"
+          -
+            name: "A Deeper Grave"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 3
+            required_skill: null
+            stats:
+              -
+                stat: "Kill Skill Duration"
+                value: "+8%"
+          -
+            name: "Blood Shot"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Bonus Damage"
+                value: "+10%"
+          -
+            name: "Essence Leech"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Lifesteal"
+                value: "+2%"
+          -
+            name: "Heartpiercer"
+            type: "Capstone"
+            required_points: 25
+            max_points: 1
+            required_skill: "Incarnate"
+            stats: []
+          -
+            name: "Blood Is Power"
+            type: "Passive Skill"
+            required_points: 25
+            max_points: 3
+            required_skill: "Essence Leech"
+            stats:
+              -
+                stat: "Bonus Damage"
+                value: "+100%"
+      -
+        name: "Dead Ringer"
+        action_skills:
+          - "Dead Ringer"
+          - "Cursed Blade"
+          - "Haruspex"
+        skills:
+          -
+            name: "Sanguine Fiends"
+            type: "Kill Skill"
+            required_points: 0
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Health Restored"
+                value: "+4%"
+          -
+            name: "Idle Hands"
+            type: "Passive Skill"
+            required_points: 0
+            max_points: 3
+            required_skill: null
+            stats:
+              -
+                stat: "Reload Speed (full Health)"
+                value: "+12,22,30%"
+          -
+            name: "Cold Iron"
+            type: "Passive Skill"
+            required_points: 0
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Gun Damage"
+                value: "+3%"
+              -
+                stat: "Minion Gun Damage"
+                value: "+6%"
+          -
+            name: "Fell Inscriptions"
+            type: "Passive Skill"
+            required_points: 0
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Melee Damage"
+                value: "+7%"
+              -
+                stat: "Max-Health"
+                value: "+6%"
+          -
+            name: "Grave Assault"
+            type: "Kill Skill"
+            required_points: 5
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Fire Rate"
+                value: "+1.5% /stack"
+          -
+            name: "Ghast Blaster"
+            type: "Augment"
+            required_points: 5
+            max_points: 1
+            required_skill: "Dead Ringer"
+            stats: []
+          -
+            name: "Portents of Suffering"
+            type: "Passive Skill"
+            required_points: 5
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Status Effect Damage"
+                value: "+7%"
+          -
+            name: "Coven"
+            type: "Augment"
+            required_points: 5
+            max_points: 1
+            required_skill: "Dead Ringer"
+            stats: []
+          -
+            name: "Cursed Blade"
+            type: "Passive Skill"
+            required_points: 5
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Curse Damage"
+                value: "+89"
+          -
+            name: "Blood Sacrifice"
+            type: "Passive Skill"
+            required_points: 10
+            max_points: 1
+            required_skill: null
+            stats: []
+          -
+            name: "Grave Fiends"
+            type: "Kill Skill"
+            required_points: 10
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Damage Dealt"
+                value: "+2.5% /stack"
+          -
+            name: "Grave Quickening"
+            type: "Kill Skill"
+            required_points: 10
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Action Skill Cooldown Rate"
+                value: "+3.5% /stack"
+          -
+            name: "Extra Cursed"
+            type: "Passive Skill"
+            required_points: 10
+            max_points: 1
+            required_skill: "Cursed Blade"
+            stats:
+              -
+                stat: "Curse Damage on Critical Hit"
+                value: "+200%"
+          -
+            name: "Blight Attunement"
+            type: "Attune Kill Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Damage over time"
+                value: "293/s"
+          -
+            name: "Wither"
+            type: "Kill Skill Augment"
+            required_points: 15
+            max_points: 1
+            required_skill: "Dead Ringer"
+            stats: []
+          -
+            name: "Prismatic Ichor"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Damage of inital Status Effect"
+                value: "+30%"
+          -
+            name: "Keen Suffering"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Critical Hit Chance"
+                value: "+4%"
+          -
+            name: "Ghasterbait"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 3
+            required_skill: null
+            stats:
+              -
+                stat: "Cooldown"
+                value: "120,100,80 s"
+          -
+            name: "Shot to Go!"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 3
+            required_skill: null
+            stats:
+              -
+                stat: "Ammo Refilled"
+                value: "+15%"
+          -
+            name: "Necrosis"
+            type: "Passive Skill"
+            required_points: 25
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Corrosive Damage"
+                value: "+8%"
+              -
+                stat: "Corrosive Status Effect Damage"
+                value: "+6%"
+          -
+            name: "Heirloom"
+            type: "Capstone"
+            required_points: 25
+            max_points: 1
+            required_skill: "Dead Ringer"
+            stats: []
+          -
+            name: "Burning Attunement"
+            type: "Attune Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Critical Hit Damage"
+                value: "+6%"
+              -
+                stat: "Status Effect Application Chance"
+                value: "+7%"
+          -
+            name: "Hellish Harvest"
+            type: "Augment"
+            required_points: 15
+            max_points: 1
+            required_skill: "Dead Ringer"
+            stats: []
+          -
+            name: "Recurrence"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Gun Damage"
+                value: "+0.16% /stack"
+              -
+                stat: "Melee Damage"
+                value: "+0.2% /stack"
+          -
+            name: "Reverburnations"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Damage Dealt"
+                value: "+30% Initial Damage"
+          -
+            name: "Haruspex"
+            type: "Melee Override"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Damage"
+                value: "+1785"
+          -
+            name: "Burnt Offering"
+            type: "Passive Skill"
+            required_points: 25
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Incendiary Damage"
+                value: "+8%"
+              -
+                stat: "Incendiary Status Effect Damage"
+                value: "+6%"
+          -
+            name: "Grim Reaper"
+            type: "Capstone"
+            required_points: 25
+            max_points: 1
+            required_skill: "Dead Ringer"
+            stats: []
+          -
+            name: "Pincushion"
+            type: "Passive Skill"
+            required_points: 25
+            max_points: 1
+            required_skill: "Haruspex"
+            stats: []
+          -
+            name: "Prismatic Weaponry"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Bonus Damage"
+                value: "+6%"
+          -
+            name: "Banshee's Wail"
+            type: "Augment"
+            required_points: 15
+            max_points: 1
+            required_skill: "Dead Ringer"
+            stats: []
+          -
+            name: "Obedient Fiends"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Minion Damage"
+                value: "+7%"
+              -
+                stat: "Command Skill Damage"
+                value: "+7%"
+              -
+                stat: "Minion Skill Damage"
+                value: "+7%"
+          -
+            name: "Spirit Bomb"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 3
+            required_skill: null
+            stats:
+              -
+                stat: "Reaper Max-Health"
+                value: "+12%"
+              -
+                stat: "Spirit Bomb Damage"
+                value: "+1785"
+          -
+            name: "Ancient Rites"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Minion Damage"
+                value: "+0.2% /stack"
+          -
+            name: "Death Follows Closer"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 3
+            required_skill: null
+            stats:
+              -
+                stat: "Cooldown"
+                value: "120,100,80s"
+          -
+            name: "Diener"
+            type: "Passive Skill"
+            required_points: 25
+            max_points: 1
+            required_skill: null
+            stats: []
+          -
+            name: "Dark Pact"
+            type: "Capstone"
+            required_points: 25
+            max_points: 1
+            required_skill: "Dead Ringer"
+            stats: []
+      -
+        name: "Phase Phamiliar"
+        action_skills:
+          - "Phase Phamiliar"
+        skills:
+          -
+            name: "Grave Sustenance"
+            type: "Kill Skill"
+            required_points: 0
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Missing Action Skill Duration Restored"
+                value: "+5%"
+          -
+            name: "Enchantment"
+            type: "Passive Skill"
+            required_points: 0
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Bonus Kinetic Damage"
+                value: "+7.5%"
+          -
+            name: "Blood is Magic"
+            type: "Passive Skill"
+            required_points: 0
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Action Skill Damage"
+                value: "up to +8%"
+          -
+            name: "Hasty Fiends"
+            type: "Passive Skill"
+            required_points: 0
+            max_points: 3
+            required_skill: null
+            stats:
+              -
+                stat: "Move Speed"
+                value: "+5%"
+              -
+                stat: "Damage Reduction"
+                value: "+7.69,14.29,20%"
+          -
+            name: "Grave Command"
+            type: "Kill Skill"
+            required_points: 5
+            max_points: 3
+            required_skill: null
+            stats:
+              -
+                stat: "Command Skill Cooldown"
+                value: "+8%"
+              -
+                stat: "Respawn Cooldown"
+                value: "+8%"
+          -
+            name: "Violent Outburst"
+            type: "Augment"
+            required_points: 5
+            max_points: 1
+            required_skill: "Phase Phamiliar"
+            stats: []
+          -
+            name: "Overprotective"
+            type: "Kill Skill"
+            required_points: 5
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Overshield"
+                value: "+4%"
+          -
+            name: "Blink Strike"
+            type: "Augment"
+            required_points: 5
+            max_points: 1
+            required_skill: "Phase Phamiliar"
+            stats: []
+          -
+            name: "Yowl and Bay"
+            type: "Passive Skill"
+            required_points: 5
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Maximum Health Capacity"
+                value: "+8%"
+              -
+                stat: "Gun Damage"
+                value: "+5%"
+          -
+            name: "Mourning"
+            type: "Passive Skill"
+            required_points: 10
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Kill Skill Effectiveness"
+                value: "+6%"
+          -
+            name: "Claw and Bang"
+            type: "Passive Skill"
+            required_points: 10
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Melee Damage"
+                value: "+8%"
+              -
+                stat: "Ordnance Damage"
+                value: "+6%"
+          -
+            name: "Overheal"
+            type: "Passive Skill"
+            required_points: 10
+            max_points: 3
+            required_skill: null
+            stats:
+              -
+                stat: "Health Regeneration"
+                value: "+1%"
+          -
+            name: "Vorpal Fiends"
+            type: "Passive Skill"
+            required_points: 10
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Critical Hit Damage"
+                value: "+5%"
+          -
+            name: "Icy Attunement"
+            type: "Attune Kill Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Ammo Restoration"
+                value: "+4%"
+              -
+                stat: "Ordnance Cooldown Restoration"
+                value: "+4%"
+          -
+            name: "Hexus Nexus"
+            type: "Augment"
+            required_points: 15
+            max_points: 1
+            required_skill: "Phase Phamiliar"
+            stats: []
+          -
+            name: "Blast Rites"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Overshield"
+                value: "+5%"
+              -
+                stat: "Fire Rate"
+                value: "+5%"
+          -
+            name: "Overspirited"
+            type: "Kill Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Damage"
+                value: "982"
+              -
+                stat: "Overkill Bonus Damage"
+                value: "+10%"
+          -
+            name: "Blasted Fiends"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Ordnance Damage"
+                value: "+7%"
+              -
+                stat: "Minion Damage"
+                value: "+10% of Ordnance Increases"
+          -
+            name: "Corporeal"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 3
+            required_skill: null
+            stats:
+              -
+                stat: "Maximum Overshield Capacity"
+                value: "+12%"
+              -
+                stat: "Overshield Duration"
+                value: "+12%"
+              -
+                stat: "Damage Dealt"
+                value: "+6%"
+          -
+            name: "Shiver"
+            type: "Passive Skill"
+            required_points: 25
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Cryo Damage"
+                value: "+8%"
+              -
+                stat: "Cryo Status Effect Damage"
+                value: "+6%"
+          -
+            name: "Trouble Bubble"
+            type: "Capstone"
+            required_points: 25
+            max_points: 1
+            required_skill: "Phase Phamiliar"
+            stats: []
+          -
+            name: "Elemental Essence"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Elemental Damage"
+                value: "+4%"
+          -
+            name: "Vorpal Fang"
+            type: "Augment"
+            required_points: 15
+            max_points: 1
+            required_skill: "Phase Phamiliar"
+            stats: []
+          -
+            name: "Keen Fiends"
+            type: "Passive Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Minion Critical Hit Chance"
+                value: "+4%"
+          -
+            name: "Infernal Sum"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Critical Hit Damage"
+                value: "+8%"
+          -
+            name: "Sacrificial Essence"
+            type: "Kill Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Damage Dealt"
+                value: "+1.5% /stack"
+          -
+            name: "Reawakening"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Chance"
+                value: "+5%"
+          -
+            name: "Tail Whip"
+            type: "Passive Skill"
+            required_points: 25
+            max_points: 1
+            required_skill: null
+            stats: []
+          -
+            name: "Double Trouble"
+            type: "Capstone"
+            required_points: 25
+            max_points: 1
+            required_skill: "Phase Phamiliar"
+            stats: []
+          -
+            name: "Shocking Attunement"
+            type: "Attune Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Move Speed"
+                value: "+4%"
+              -
+                stat: "Gun Damage (walking)"
+                value: "+6%"
+          -
+            name: "Beast Mode"
+            type: "Augment"
+            required_points: 15
+            max_points: 1
+            required_skill: "Phase Phamiliar"
+            stats: []
+          -
+            name: "Grave Current"
+            type: "Kill Skill"
+            required_points: 15
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Minion Bonus Shock Damage"
+                value: "+8% /stack"
+          -
+            name: "Deadwire"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Damage"
+                value: "+80% of Gun Damage Dealt"
+          -
+            name: "Grave Thirst"
+            type: "Kill Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Lifesteal"
+                value: "+1.5% /stack"
+              -
+                stat: "Minion Lifesteal"
+                value: "+3% /stack"
+          -
+            name: "Infusion"
+            type: "Passive Skill"
+            required_points: 20
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Bonus Damage"
+                value: "+8%"
+          -
+            name: "Stormblessed"
+            type: "Passive Skill"
+            required_points: 25
+            max_points: 5
+            required_skill: null
+            stats:
+              -
+                stat: "Shock Damage"
+                value: "+8%"
+              -
+                stat: "Shock Status Effect Damage"
+                value: "+6%"
+          -
+            name: "Unsealed"
+            type: "Kill Skill Capstone"
+            required_points: 25
+            max_points: 1
+            required_skill: "Phase Phamiliar"
+            stats: []

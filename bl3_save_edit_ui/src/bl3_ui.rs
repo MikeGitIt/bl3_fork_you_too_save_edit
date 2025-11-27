@@ -1,10 +1,10 @@
 use std::mem;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 use iced::alignment::Horizontal;
 use iced::{
     button, pick_list, svg, tooltip, Alignment, Application, Button, Color, Column, Command,
-    Container, Element, Length, PickList, Row, Svg, Text, Tooltip,
+    Container, Element, Length, PickList, Row, Space, Svg, Text, Tooltip,
 };
 use tracing::{error, info};
 
@@ -20,15 +20,16 @@ use bl3_save_edit_core::parser::HeaderType;
 use crate::bl3_ui_style::{
     Bl3UiContentStyle, Bl3UiMenuBarStyle, Bl3UiPositiveButtonStyle, Bl3UiStyle, Bl3UiTooltipStyle,
 };
+use crate::bl4_ammo::bl4_totals_for_pool;
 use crate::commands::{initialization, interaction};
 use crate::config::{Bl3Config, ConfigMessage};
 use crate::resources::fonts::{
     JETBRAINS_MONO, JETBRAINS_MONO_BOLD, JETBRAINS_MONO_NL_EXTRA_BOLD_ITALIC,
 };
-use crate::resources::svgs::REFRESH;
+use crate::resources::svgs::{REFRESH, SETTINGS};
 use crate::state_mappers::{manage_profile, manage_save};
 use crate::update::Release;
-use crate::util::ErrorExt;
+use crate::util::{self, ErrorExt};
 use crate::views::choose_save_directory::{
     ChooseSaveDirectoryState, ChooseSaveInteractionMessage, ChooseSaveMessage,
 };
@@ -45,19 +46,25 @@ use crate::views::manage_profile::{
     ManageProfileInteractionMessage, ManageProfileState, ManageProfileView,
 };
 use crate::views::manage_save::character::{
-    CharacterAmmoMessage, CharacterGearUnlockedMessage, CharacterSduMessage,
+    bl4_handle_skill_points_change, bl4_handle_skill_toggle, bl4_metadata_for_state,
+    tree_name_matches_metadata, CharacterAmmoMessage, CharacterGearUnlockedMessage, CharacterSduMessage,
     CharacterSkinSelectedMessage, SaveCharacterInteractionMessage,
 };
 use crate::views::manage_save::currency::SaveCurrencyInteractionMessage;
 use crate::views::manage_save::general::SaveGeneralInteractionMessage;
-use crate::views::manage_save::inventory::SaveInventoryInteractionMessage;
+use crate::views::manage_save::inventory::{
+    Bl4InventoryDetailTab, Bl4InventoryEntry, SaveInventoryInteractionMessage,
+};
 use crate::views::manage_save::main::{SaveTabBarInteractionMessage, SaveTabBarView};
-use crate::views::manage_save::vehicle::{SaveVehicleInteractionMessage, VehicleUnlockedMessage};
+use crate::views::manage_save::vehicle::{
+    Bl4UnlockableCategoryState, SaveVehicleInteractionMessage, VehicleUnlockedMessage,
+};
 use crate::views::manage_save::{ManageSaveInteractionMessage, ManageSaveState, ManageSaveView};
 use crate::views::settings::{SettingsInteractionMessage, SettingsState};
 use crate::views::InteractionExt;
 use crate::widgets::notification::{Notification, NotificationSentiment};
 use crate::{state_mappers, update, views, VERSION};
+use bl3_save_edit_core::bl4::{self, Bl4LoadedSave, DecryptOutcome, EncryptOutcome};
 
 #[derive(Debug, Default)]
 pub struct Bl3Application {
@@ -72,6 +79,7 @@ pub struct Bl3Application {
     refresh_button_state: button::State,
     update_button_state: button::State,
     save_file_button_state: button::State,
+    settings_top_button_state: button::State,
     notification: Option<Notification>,
     latest_release: Option<Release>,
     is_updating: bool,
@@ -89,6 +97,7 @@ pub enum Bl3Message {
     Interaction(InteractionMessage),
     ChooseSave(ChooseSaveMessage),
     SaveFileCompleted(MessageResult<Bl3Save>),
+    Bl4SaveCompleted(MessageResult<Bl4LoadedSave>),
     SaveProfileCompleted(MessageResult<Bl3Profile>),
     FilesLoadedAfterSave(MessageResult<(Bl3FileType, Vec<Bl3FileType>)>),
     ClearNotification,
@@ -147,6 +156,27 @@ impl std::default::Default for ViewState {
     }
 }
 
+impl Bl3Application {
+    fn is_current_bl4(&self) -> bool {
+        matches!(self.loaded_files_selected.as_ref(), Bl3FileType::Bl4Save(_))
+            || self.manage_save_state.bl4_file.is_some()
+    }
+
+    fn bl4_points_from_level(level: i32) -> i32 {
+        (level - 1).max(0)
+    }
+}
+
+fn is_primary_skill_tree(name: &str) -> bool {
+    if name.eq_ignore_ascii_case("sdu_upgrades") {
+        return false;
+    }
+    if name.starts_with("ProgressGraph_Specializations") {
+        return false;
+    }
+    true
+}
+
 impl Application for Bl3Application {
     type Executor = tokio::runtime::Runtime;
     type Message = Bl3Message;
@@ -166,6 +196,10 @@ impl Application for Bl3Application {
         let saves_dir_input = config.saves_dir().to_string_lossy().to_string();
         let backup_dir_input = config.backup_dir().to_string_lossy().to_string();
         let ui_scale_factor = config.ui_scale_factor();
+        let bl4_steamid = config
+            .bl4_user_id()
+            .map(|s| s.to_string())
+            .unwrap_or_default();
 
         (
             Bl3Application {
@@ -176,6 +210,7 @@ impl Application for Bl3Application {
                     backup_dir_input,
                     saves_dir_input,
                     ui_scale_factor,
+                    bl4_steamid,
                     ..SettingsState::default()
                 },
                 ..Bl3Application::default()
@@ -185,7 +220,11 @@ impl Application for Bl3Application {
     }
 
     fn title(&self) -> String {
-        format!("Borderlands 3 Save Editor - v{}", VERSION)
+        if self.is_current_bl4() {
+            format!("Borderlands 4 Save Editor - v{}", VERSION)
+        } else {
+            format!("Borderlands 3 Save Editor - v{}", VERSION)
+        }
     }
 
     fn update(&mut self, message: Self::Message) -> Command<Self::Message> {
@@ -196,6 +235,7 @@ impl Application for Bl3Application {
                         return Command::perform(
                             interaction::choose_save_directory::load_files_in_directory(
                                 self.config.saves_dir().to_path_buf(),
+                                self.config.bl4_user_id().cloned(),
                             ),
                             |r| {
                                 Bl3Message::ChooseSave(ChooseSaveMessage::FilesLoaded(
@@ -290,6 +330,9 @@ impl Application for Bl3Application {
                     }
                     InteractionMessage::ManageSaveInteraction(manage_save_msg) => {
                         match manage_save_msg {
+                            ManageSaveInteractionMessage::SetBl4ViewMode(mode) => {
+                                self.manage_save_state.bl4_view_mode = mode;
+                            }
                             ManageSaveInteractionMessage::TabBar(tab_bar_msg) => {
                                 match tab_bar_msg {
                                     SaveTabBarInteractionMessage::General => {
@@ -346,6 +389,15 @@ impl Application for Bl3Application {
                                         .filename_input = filename.clone();
 
                                     self.manage_save_state.current_file.file_name = filename;
+                                    if let Some(bl4_file) = self.manage_save_state.bl4_file.as_mut()
+                                    {
+                                        bl4_file.summary.file_name = self
+                                            .manage_save_state
+                                            .save_view_state
+                                            .general_state
+                                            .filename_input
+                                            .clone();
+                                    }
                                 }
                                 SaveGeneralInteractionMessage::GenerateGuidPressed => {
                                     let guid =
@@ -361,6 +413,20 @@ impl Application for Bl3Application {
                                         .save_view_state
                                         .general_state
                                         .save_type_selected = save_type;
+                                }
+                                SaveGeneralInteractionMessage::Bl4DifficultyChanged(difficulty) => {
+                                    self.manage_save_state
+                                        .save_view_state
+                                        .general_state
+                                        .bl4_difficulty_input = difficulty;
+                                }
+                                SaveGeneralInteractionMessage::Bl4TrackedMissionsChanged(
+                                    tracked,
+                                ) => {
+                                    self.manage_save_state
+                                        .save_view_state
+                                        .general_state
+                                        .bl4_tracked_missions_input = tracked;
                                 }
                             },
                             ManageSaveInteractionMessage::Character(character_msg) => {
@@ -386,6 +452,8 @@ impl Application for Bl3Application {
                                         character_state.level_input = level;
 
                                         character_state.experience_points_input = xp_points;
+                                        character_state.bl4_progress_character_input =
+                                            Bl3Application::bl4_points_from_level(level);
                                     }
                                     SaveCharacterInteractionMessage::ExperiencePoints(xp) => {
                                         let level = experience_to_level(xp as i32).unwrap_or(1);
@@ -398,12 +466,382 @@ impl Application for Bl3Application {
                                         character_state.experience_points_input = xp;
 
                                         character_state.level_input = level;
+                                        character_state.bl4_progress_character_input =
+                                            Bl3Application::bl4_points_from_level(level);
                                     }
                                     SaveCharacterInteractionMessage::AbilityPoints(points) => {
+                                        let character_state = &mut self
+                                            .manage_save_state
+                                            .save_view_state
+                                            .character_state;
+                                        character_state.ability_points_input = points;
+                                        character_state.bl4_progress_specialization_input = points;
+                                    }
+                                    SaveCharacterInteractionMessage::DetailTabChanged(tab) => {
                                         self.manage_save_state
                                             .save_view_state
                                             .character_state
-                                            .ability_points_input = points;
+                                            .detail_tab = tab;
+                                    }
+                                    SaveCharacterInteractionMessage::Bl4CosmeticBody(value) => {
+                                        self.manage_save_state
+                                            .save_view_state
+                                            .character_state
+                                            .bl4_body_input = value;
+                                    }
+                                    SaveCharacterInteractionMessage::Bl4CosmeticHead(value) => {
+                                        self.manage_save_state
+                                            .save_view_state
+                                            .character_state
+                                            .bl4_head_input = value;
+                                    }
+                                    SaveCharacterInteractionMessage::Bl4CosmeticSkin(value) => {
+                                        self.manage_save_state
+                                            .save_view_state
+                                            .character_state
+                                            .bl4_skin_input = value;
+                                    }
+                                    SaveCharacterInteractionMessage::Bl4PrimaryColor(value) => {
+                                        self.manage_save_state
+                                            .save_view_state
+                                            .character_state
+                                            .bl4_primary_color_input = value;
+                                    }
+                                    SaveCharacterInteractionMessage::Bl4SecondaryColor(value) => {
+                                        self.manage_save_state
+                                            .save_view_state
+                                            .character_state
+                                            .bl4_secondary_color_input = value;
+                                    }
+                                    SaveCharacterInteractionMessage::Bl4TertiaryColor(value) => {
+                                        self.manage_save_state
+                                            .save_view_state
+                                            .character_state
+                                            .bl4_tertiary_color_input = value;
+                                    }
+                                    SaveCharacterInteractionMessage::Bl4EchoBody(value) => {
+                                        self.manage_save_state
+                                            .save_view_state
+                                            .character_state
+                                            .bl4_echo_body_input = value;
+                                    }
+                                    SaveCharacterInteractionMessage::Bl4EchoAttachment(value) => {
+                                        self.manage_save_state
+                                            .save_view_state
+                                            .character_state
+                                            .bl4_echo_attachment_input = value;
+                                    }
+                                    SaveCharacterInteractionMessage::Bl4EchoSkin(value) => {
+                                        self.manage_save_state
+                                            .save_view_state
+                                            .character_state
+                                            .bl4_echo_skin_input = value;
+                                    }
+                                    SaveCharacterInteractionMessage::Bl4VehicleSkin(value) => {
+                                        self.manage_save_state
+                                            .save_view_state
+                                            .character_state
+                                            .bl4_vehicle_skin_input = value;
+                                    }
+                                    SaveCharacterInteractionMessage::Bl4EquipSlots(value) => {
+                                        self.manage_save_state
+                                            .save_view_state
+                                            .character_state
+                                            .bl4_equip_slots_input = value;
+                                    }
+                                    SaveCharacterInteractionMessage::Bl4UniqueRewards(value) => {
+                                        self.manage_save_state
+                                            .save_view_state
+                                            .character_state
+                                            .bl4_unique_rewards_input = value;
+                                    }
+                                    SaveCharacterInteractionMessage::Bl4ProgressCharacter(
+                                        value,
+                                    ) => {
+                                        self.manage_save_state
+                                            .save_view_state
+                                            .character_state
+                                            .bl4_progress_character_input = value;
+                                    }
+                                    SaveCharacterInteractionMessage::Bl4ProgressSpecialization(
+                                        value,
+                                    ) => {
+                                        let character_state = &mut self
+                                            .manage_save_state
+                                            .save_view_state
+                                            .character_state;
+                                        character_state.bl4_progress_specialization_input = value;
+                                        character_state.ability_points_input = value;
+                                    }
+                                    SaveCharacterInteractionMessage::Bl4ProgressEcho(value) => {
+                                        self.manage_save_state
+                                            .save_view_state
+                                            .character_state
+                                            .bl4_progress_echo_input = value;
+                                    }
+                                    SaveCharacterInteractionMessage::Bl4SkillMassInput(value) => {
+                                        self.manage_save_state
+                                            .save_view_state
+                                            .character_state
+                                            .bl4_skill_points_mass_input = value.max(0).min(999);
+                                    }
+                                    SaveCharacterInteractionMessage::Bl4SkillApplyAll => {
+                                        let metadata = {
+                                            let summary = self
+                                                .manage_save_state
+                                                .bl4_file
+                                                .as_ref()
+                                                .map(|file| &file.summary);
+                                            bl4_metadata_for_state(
+                                                &self.manage_save_state.save_view_state.character_state,
+                                                summary,
+                                            )
+                                        };
+                                        let character_state = &mut self
+                                            .manage_save_state
+                                            .save_view_state
+                                            .character_state;
+                                        let value =
+                                            character_state.bl4_skill_points_mass_input.max(0);
+                                        let selected_tree_name = character_state
+                                            .bl4_action_tree_selected
+                                            .clone()
+                                            .or_else(|| metadata.and_then(|m| m.tree_names().first().cloned()));
+                                        if let (Some(meta), Some(selected_tree_name)) = (metadata, selected_tree_name) {
+                                            if let Some(tree_meta) = meta.tree_by_name(&selected_tree_name) {
+                                                let matching_indices: Vec<usize> = character_state
+                                                    .bl4_skill_trees
+                                                    .iter()
+                                                    .enumerate()
+                                                    .filter_map(|(idx, tree_state)| {
+                                                        let matches = tree_name_matches_metadata(
+                                                            &tree_state.name,
+                                                            &tree_meta.name,
+                                                        ) || tree_state
+                                                            .group_def_name
+                                                            .as_deref()
+                                                            .map(|name| tree_name_matches_metadata(name, &tree_meta.name))
+                                                            .unwrap_or(false);
+                                                        if matches { Some(idx) } else { None }
+                                                    })
+                                                    .collect();
+                                                for tree_index in matching_indices {
+                                                    let node_len =
+                                                        character_state.bl4_skill_trees[tree_index].nodes.len();
+                                                    for node_index in 0..node_len {
+                                                        bl4_handle_skill_points_change(
+                                                            character_state,
+                                                            metadata,
+                                                            tree_index,
+                                                            node_index,
+                                                            value,
+                                                        );
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    SaveCharacterInteractionMessage::Bl4SkillMaxAll => {
+                                        let metadata = {
+                                            let summary = self
+                                                .manage_save_state
+                                                .bl4_file
+                                                .as_ref()
+                                                .map(|file| &file.summary);
+                                            bl4_metadata_for_state(
+                                                &self.manage_save_state.save_view_state.character_state,
+                                                summary,
+                                            )
+                                        };
+                                        let character_state = &mut self
+                                            .manage_save_state
+                                            .save_view_state
+                                            .character_state;
+                                        character_state.bl4_skill_points_mass_input = 5;
+                                        let selected_tree_name = character_state
+                                            .bl4_action_tree_selected
+                                            .clone()
+                                            .or_else(|| metadata.and_then(|m| m.tree_names().first().cloned()));
+                                        if let (Some(meta), Some(selected_tree_name)) = (metadata, selected_tree_name) {
+                                            if let Some(tree_meta) = meta.tree_by_name(&selected_tree_name) {
+                                                // Collect matching indices first to avoid holding a mutable borrow across handler calls.
+                                                let matching_indices: Vec<usize> = character_state
+                                                    .bl4_skill_trees
+                                                    .iter()
+                                                    .enumerate()
+                                                    .filter_map(|(idx, tree_state)| {
+                                                        let matches = tree_name_matches_metadata(
+                                                            &tree_state.name,
+                                                            &tree_meta.name,
+                                                        ) || tree_state
+                                                            .group_def_name
+                                                            .as_deref()
+                                                            .map(|name| tree_name_matches_metadata(name, &tree_meta.name))
+                                                            .unwrap_or(false);
+                                                        if matches { Some(idx) } else { None }
+                                                    })
+                                                    .collect();
+                                                for tree_index in matching_indices {
+                                                    let node_len = character_state.bl4_skill_trees[tree_index].nodes.len();
+                                                    for node_index in 0..node_len {
+                                                        bl4_handle_skill_points_change(
+                                                            character_state,
+                                                            metadata,
+                                                            tree_index,
+                                                            node_index,
+                                                            5,
+                                                        );
+                                                        bl4_handle_skill_toggle(
+                                                            character_state,
+                                                            metadata,
+                                                            tree_index,
+                                                            node_index,
+                                                            true,
+                                                        );
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    SaveCharacterInteractionMessage::Bl4SkillResetAll => {
+                                        let metadata = {
+                                            let summary = self
+                                                .manage_save_state
+                                                .bl4_file
+                                                .as_ref()
+                                                .map(|file| &file.summary);
+                                            bl4_metadata_for_state(
+                                                &self.manage_save_state.save_view_state.character_state,
+                                                summary,
+                                            )
+                                        };
+                                        let character_state = &mut self
+                                            .manage_save_state
+                                            .save_view_state
+                                            .character_state;
+                                        for tree_index in 0..character_state.bl4_skill_trees.len() {
+                                            let node_len =
+                                                character_state.bl4_skill_trees[tree_index].nodes.len();
+                                            for node_index in 0..node_len {
+                                                bl4_handle_skill_points_change(
+                                                    character_state,
+                                                    metadata,
+                                                    tree_index,
+                                                    node_index,
+                                                    0,
+                                                );
+                                            }
+                                        }
+                                    }
+                                    SaveCharacterInteractionMessage::Bl4ClearMissions => {
+                                        let character_state = &mut self
+                                            .manage_save_state
+                                            .save_view_state
+                                            .character_state;
+                                        character_state.bl4_clear_missions_pressed = true;
+                                        // Normalize tracked missions display
+                                        self.manage_save_state
+                                            .save_view_state
+                                            .general_state
+                                            .bl4_tracked_missions_input =
+                                            "Mission_Main_Beach, none, none".to_string();
+                                    }
+                                    SaveCharacterInteractionMessage::Bl4ClassChanged(value) => {
+                                        let character_state = &mut self
+                                            .manage_save_state
+                                            .save_view_state
+                                            .character_state;
+                                        character_state.bl4_class_selected =
+                                            if value.is_empty() { None } else { Some(value) };
+                                        character_state.bl4_skill_tree_selected = None;
+                                        character_state.bl4_action_tree_selected = None;
+                                    }
+                                    SaveCharacterInteractionMessage::Bl4SkillTreeChanged(value) => {
+                                        self.manage_save_state
+                                            .save_view_state
+                                            .character_state
+                                            .bl4_skill_tree_selected =
+                                            if value.is_empty() { None } else { Some(value) };
+                                    }
+                                    SaveCharacterInteractionMessage::Bl4ActionSkillTreeChanged(
+                                        value,
+                                    ) => {
+                                        self.manage_save_state
+                                            .save_view_state
+                                            .character_state
+                                            .bl4_action_tree_selected =
+                                            if value.is_empty() { None } else { Some(value) };
+                                    }
+                                    SaveCharacterInteractionMessage::Bl4SkillNodePoints {
+                                        tree_index,
+                                        node_index,
+                                        value,
+                                    } => {
+                                        let metadata = {
+                                            let summary = self
+                                                .manage_save_state
+                                                .bl4_file
+                                                .as_ref()
+                                                .map(|file| &file.summary);
+                                            bl4_metadata_for_state(
+                                                &self.manage_save_state.save_view_state.character_state,
+                                                summary,
+                                            )
+                                        };
+                                        bl4_handle_skill_points_change(
+                                            &mut self
+                                                .manage_save_state
+                                                .save_view_state
+                                                .character_state,
+                                            metadata,
+                                            tree_index,
+                                            node_index,
+                                            value,
+                                        );
+                                    }
+                                    SaveCharacterInteractionMessage::Bl4SkillNodeActivationLevel {
+                                        tree_index,
+                                        node_index,
+                                        value,
+                                    } => {
+                                        if let Some(tree) = self
+                                            .manage_save_state
+                                            .save_view_state
+                                            .character_state
+                                            .bl4_skill_trees
+                                            .get_mut(tree_index)
+                                        {
+                                            if let Some(node) = tree.nodes.get_mut(node_index) {
+                                                node.activation_level = Some(value);
+                                            }
+                                        }
+                                    }
+                                    SaveCharacterInteractionMessage::Bl4SkillNodeToggle {
+                                        tree_index,
+                                        node_index,
+                                        value,
+                                    } => {
+                                        let metadata = {
+                                            let summary = self
+                                                .manage_save_state
+                                                .bl4_file
+                                                .as_ref()
+                                                .map(|file| &file.summary);
+                                            bl4_metadata_for_state(
+                                                &self.manage_save_state.save_view_state.character_state,
+                                                summary,
+                                            )
+                                        };
+                                        bl4_handle_skill_toggle(
+                                            &mut self
+                                                .manage_save_state
+                                                .save_view_state
+                                                .character_state,
+                                            metadata,
+                                            tree_index,
+                                            node_index,
+                                            value,
+                                        );
                                     }
                                     SaveCharacterInteractionMessage::SduMessage(sdu_message) => {
                                         let sdu_unlocker = &mut self
@@ -446,23 +884,38 @@ impl Application for Bl3Application {
                                             .character_state
                                             .sdu_unlocker;
 
-                                        sdu_unlocker.backpack.input =
-                                            SaveSduSlot::Backpack.maximum();
+                                        if self.manage_save_state.bl4_file.is_some() {
+                                            sdu_unlocker.backpack.input = 8;
+                                            sdu_unlocker.sniper.input = 7;
+                                            sdu_unlocker.shotgun.input = 7;
+                                            sdu_unlocker.pistol.input = 7;
+                                            sdu_unlocker.grenade.input = 7;
+                                            sdu_unlocker.smg.input = 7;
+                                            sdu_unlocker.assault_rifle.input = 7;
+                                            sdu_unlocker.heavy.input = 7;
+                                        } else {
+                                            sdu_unlocker.backpack.input =
+                                                SaveSduSlot::Backpack.maximum();
 
-                                        sdu_unlocker.sniper.input = SaveSduSlot::Sniper.maximum();
+                                            sdu_unlocker.sniper.input =
+                                                SaveSduSlot::Sniper.maximum();
 
-                                        sdu_unlocker.shotgun.input = SaveSduSlot::Shotgun.maximum();
+                                            sdu_unlocker.shotgun.input =
+                                                SaveSduSlot::Shotgun.maximum();
 
-                                        sdu_unlocker.pistol.input = SaveSduSlot::Pistol.maximum();
+                                            sdu_unlocker.pistol.input =
+                                                SaveSduSlot::Pistol.maximum();
 
-                                        sdu_unlocker.grenade.input = SaveSduSlot::Grenade.maximum();
+                                            sdu_unlocker.grenade.input =
+                                                SaveSduSlot::Grenade.maximum();
 
-                                        sdu_unlocker.smg.input = SaveSduSlot::Smg.maximum();
+                                            sdu_unlocker.smg.input = SaveSduSlot::Smg.maximum();
 
-                                        sdu_unlocker.assault_rifle.input =
-                                            SaveSduSlot::Ar.maximum();
+                                            sdu_unlocker.assault_rifle.input =
+                                                SaveSduSlot::Ar.maximum();
 
-                                        sdu_unlocker.heavy.input = SaveSduSlot::Heavy.maximum();
+                                            sdu_unlocker.heavy.input = SaveSduSlot::Heavy.maximum();
+                                        }
                                     }
                                     SaveCharacterInteractionMessage::AmmoMessage(ammo_message) => {
                                         let ammo_setter = &mut self
@@ -476,22 +929,22 @@ impl Application for Bl3Application {
                                                 ammo_setter.sniper.input = amount;
                                             }
                                             CharacterAmmoMessage::Shotgun(amount) => {
-                                                ammo_setter.shotgun.input = amount;
+                                                ammo_setter.shotgun.mark_dirty(amount);
                                             }
                                             CharacterAmmoMessage::Pistol(amount) => {
-                                                ammo_setter.pistol.input = amount;
+                                                ammo_setter.pistol.mark_dirty(amount);
                                             }
                                             CharacterAmmoMessage::Grenade(amount) => {
-                                                ammo_setter.grenade.input = amount;
+                                                ammo_setter.grenade.mark_dirty(amount);
                                             }
                                             CharacterAmmoMessage::Smg(amount) => {
-                                                ammo_setter.smg.input = amount;
+                                                ammo_setter.smg.mark_dirty(amount);
                                             }
                                             CharacterAmmoMessage::AssaultRifle(amount) => {
-                                                ammo_setter.assault_rifle.input = amount;
+                                                ammo_setter.assault_rifle.mark_dirty(amount);
                                             }
                                             CharacterAmmoMessage::Heavy(amount) => {
-                                                ammo_setter.heavy.input = amount;
+                                                ammo_setter.heavy.mark_dirty(amount);
                                             }
                                         }
                                     }
@@ -502,19 +955,98 @@ impl Application for Bl3Application {
                                             .character_state
                                             .ammo_setter;
 
-                                        ammo_setter.sniper.input = AmmoPool::Sniper.maximum();
+                                        if self.manage_save_state.bl4_file.is_some() {
+                                            if let Some(max_total) =
+                                                bl4_totals_for_pool(&ammo_setter.sniper.ammo_pool)
+                                                    .and_then(|totals| totals.last().copied())
+                                            {
+                                                ammo_setter.sniper.mark_dirty(max_total);
+                                            } else {
+                                                ammo_setter
+                                                    .sniper
+                                                    .mark_dirty(AmmoPool::Sniper.maximum());
+                                            }
 
-                                        ammo_setter.shotgun.input = AmmoPool::Shotgun.maximum();
+                                            if let Some(max_total) =
+                                                bl4_totals_for_pool(&ammo_setter.shotgun.ammo_pool)
+                                                    .and_then(|totals| totals.last().copied())
+                                            {
+                                                ammo_setter.shotgun.mark_dirty(max_total);
+                                            } else {
+                                                ammo_setter
+                                                    .shotgun
+                                                    .mark_dirty(AmmoPool::Shotgun.maximum());
+                                            }
 
-                                        ammo_setter.pistol.input = AmmoPool::Pistol.maximum();
+                                            if let Some(max_total) =
+                                                bl4_totals_for_pool(&ammo_setter.pistol.ammo_pool)
+                                                    .and_then(|totals| totals.last().copied())
+                                            {
+                                                ammo_setter.pistol.mark_dirty(max_total);
+                                            } else {
+                                                ammo_setter
+                                                    .pistol
+                                                    .mark_dirty(AmmoPool::Pistol.maximum());
+                                            }
 
-                                        ammo_setter.grenade.input = AmmoPool::Grenade.maximum();
+                                            if let Some(max_total) =
+                                                bl4_totals_for_pool(&ammo_setter.grenade.ammo_pool)
+                                                    .and_then(|totals| totals.last().copied())
+                                            {
+                                                ammo_setter.grenade.mark_dirty(max_total);
+                                            } else {
+                                                ammo_setter
+                                                    .grenade
+                                                    .mark_dirty(AmmoPool::Grenade.maximum());
+                                            }
 
-                                        ammo_setter.smg.input = AmmoPool::Smg.maximum();
+                                            if let Some(max_total) =
+                                                bl4_totals_for_pool(&ammo_setter.smg.ammo_pool)
+                                                    .and_then(|totals| totals.last().copied())
+                                            {
+                                                ammo_setter.smg.mark_dirty(max_total);
+                                            } else {
+                                                ammo_setter.smg.mark_dirty(AmmoPool::Smg.maximum());
+                                            }
 
-                                        ammo_setter.assault_rifle.input = AmmoPool::Ar.maximum();
+                                            if let Some(max_total) = bl4_totals_for_pool(
+                                                &ammo_setter.assault_rifle.ammo_pool,
+                                            )
+                                            .and_then(|totals| totals.last().copied())
+                                            {
+                                                ammo_setter.assault_rifle.mark_dirty(max_total);
+                                            } else {
+                                                ammo_setter
+                                                    .assault_rifle
+                                                    .mark_dirty(AmmoPool::Ar.maximum());
+                                            }
 
-                                        ammo_setter.heavy.input = AmmoPool::Heavy.maximum();
+                                            if let Some(max_total) =
+                                                bl4_totals_for_pool(&ammo_setter.heavy.ammo_pool)
+                                                    .and_then(|totals| totals.last().copied())
+                                            {
+                                                ammo_setter.heavy.mark_dirty(max_total);
+                                            } else {
+                                                ammo_setter
+                                                    .heavy
+                                                    .mark_dirty(AmmoPool::Heavy.maximum());
+                                            }
+                                        } else {
+                                            ammo_setter.sniper.input = AmmoPool::Sniper.maximum();
+
+                                            ammo_setter.shotgun.input = AmmoPool::Shotgun.maximum();
+
+                                            ammo_setter.pistol.input = AmmoPool::Pistol.maximum();
+
+                                            ammo_setter.grenade.input = AmmoPool::Grenade.maximum();
+
+                                            ammo_setter.smg.input = AmmoPool::Smg.maximum();
+
+                                            ammo_setter.assault_rifle.input =
+                                                AmmoPool::Ar.maximum();
+
+                                            ammo_setter.heavy.input = AmmoPool::Heavy.maximum();
+                                        }
                                     }
                                     SaveCharacterInteractionMessage::PlayerClassSelected(
                                         player_class,
@@ -613,6 +1145,427 @@ impl Application for Bl3Application {
                                             });
                                         }
                                     }
+                                    SaveInventoryInteractionMessage::Bl4SerialChanged(
+                                        index,
+                                        value,
+                                    ) => {
+                                        if let Some(entry) = self
+                                            .manage_save_state
+                                            .save_view_state
+                                            .inventory_state
+                                            .bl4_inventory
+                                            .entries
+                                            .get_mut(index)
+                                        {
+                                            entry.on_serial_changed(value);
+                                        }
+                                    }
+                                    SaveInventoryInteractionMessage::Bl4AddItem => {
+                                        let inventory_state = &mut self
+                                            .manage_save_state
+                                            .save_view_state
+                                            .inventory_state
+                                            .bl4_inventory;
+                                        let next_index = inventory_state
+                                            .entries
+                                            .iter()
+                                            .filter_map(|entry| {
+                                                entry
+                                                    .slot
+                                                    .strip_prefix("slot_")
+                                                    .and_then(|s| s.parse::<usize>().ok())
+                                            })
+                                            .max()
+                                            .map(|max| max + 1)
+                                            .unwrap_or(inventory_state.entries.len());
+                                        let slot_name = format!("slot_{}", next_index);
+                                        inventory_state
+                                            .entries
+                                            .push(Bl4InventoryEntry::empty(slot_name));
+                                        inventory_state
+                                            .list_button_states
+                                            .push(button::State::default());
+                                        inventory_state
+                                            .duplicate_button_states
+                                            .push(button::State::default());
+                                        inventory_state
+                                            .share_button_states
+                                            .push(button::State::default());
+                                        inventory_state
+                                            .delete_button_states
+                                            .push(button::State::default());
+                                        inventory_state.selected_index =
+                                            Some(inventory_state.entries.len().saturating_sub(1));
+                                        inventory_state.detail_scroll_state = Default::default();
+                                    }
+                                    SaveInventoryInteractionMessage::Bl4RemoveItem(index) => {
+                                        let inventory_state = &mut self
+                                            .manage_save_state
+                                            .save_view_state
+                                            .inventory_state
+                                            .bl4_inventory;
+                                        if index < inventory_state.entries.len() {
+                                            let previous_selection = inventory_state.selected_index;
+                                            inventory_state.entries.remove(index);
+                                            if index < inventory_state.list_button_states.len() {
+                                                inventory_state.list_button_states.remove(index);
+                                            }
+                                            if index < inventory_state.duplicate_button_states.len()
+                                            {
+                                                inventory_state
+                                                    .duplicate_button_states
+                                                    .remove(index);
+                                            }
+                                            if index < inventory_state.share_button_states.len() {
+                                                inventory_state.share_button_states.remove(index);
+                                            }
+                                            if index < inventory_state.delete_button_states.len() {
+                                                inventory_state.delete_button_states.remove(index);
+                                            }
+                                            if inventory_state.entries.is_empty() {
+                                                inventory_state.selected_index = None;
+                                            } else {
+                                                let candidate = previous_selection.map(|sel| {
+                                                    if sel == index {
+                                                        sel.saturating_sub(1)
+                                                    } else if sel > index {
+                                                        sel - 1
+                                                    } else {
+                                                        sel
+                                                    }
+                                                });
+                                                let capped = candidate
+                                                    .unwrap_or(0)
+                                                    .min(inventory_state.entries.len() - 1);
+                                                inventory_state.selected_index = Some(capped);
+                                            }
+                                            inventory_state.detail_scroll_state =
+                                                Default::default();
+                                        }
+                                    }
+                                    SaveInventoryInteractionMessage::Bl4SelectItem(index) => {
+                                        let inventory_state = &mut self
+                                            .manage_save_state
+                                            .save_view_state
+                                            .inventory_state
+                                            .bl4_inventory;
+                                        if index < inventory_state.entries.len() {
+                                            inventory_state.selected_index = Some(index);
+                                            inventory_state.detail_scroll_state =
+                                                Default::default();
+                                            inventory_state.detail_tab =
+                                                Bl4InventoryDetailTab::Overview;
+                                        }
+                                    }
+                                    SaveInventoryInteractionMessage::Bl4LevelChanged(
+                                        index,
+                                        value,
+                                    ) => {
+                                        if let Some(entry) = self
+                                            .manage_save_state
+                                            .save_view_state
+                                            .inventory_state
+                                            .bl4_inventory
+                                            .entries
+                                            .get_mut(index)
+                                        {
+                                            entry.on_level_changed(value);
+                                        }
+                                    }
+                                    SaveInventoryInteractionMessage::Bl4ManufacturerChanged(
+                                        index,
+                                        value,
+                                    ) => {
+                                        if let Some(entry) = self
+                                            .manage_save_state
+                                            .save_view_state
+                                            .inventory_state
+                                            .bl4_inventory
+                                            .entries
+                                            .get_mut(index)
+                                        {
+                                            entry.on_manufacturer_changed(value);
+                                        }
+                                    }
+                                    SaveInventoryInteractionMessage::Bl4ItemTypeSelected(
+                                        index,
+                                        choice,
+                                    ) => {
+                                        if let Some(entry) = self
+                                            .manage_save_state
+                                            .save_view_state
+                                            .inventory_state
+                                            .bl4_inventory
+                                            .entries
+                                            .get_mut(index)
+                                        {
+                                            entry.on_item_type_selected(choice);
+                                        }
+                                    }
+                                    SaveInventoryInteractionMessage::Bl4StateFlagToggled(
+                                        index,
+                                        flag,
+                                        enabled,
+                                    ) => {
+                                        if let Some(entry) = self
+                                            .manage_save_state
+                                            .save_view_state
+                                            .inventory_state
+                                            .bl4_inventory
+                                            .entries
+                                            .get_mut(index)
+                                        {
+                                            entry.toggle_state_flag(flag, enabled);
+                                        }
+                                    }
+                                    SaveInventoryInteractionMessage::Bl4PartIndexChanged(
+                                        entry_index,
+                                        part_index,
+                                        value,
+                                    ) => {
+                                        if let Some(entry) = self
+                                            .manage_save_state
+                                            .save_view_state
+                                            .inventory_state
+                                            .bl4_inventory
+                                            .entries
+                                            .get_mut(entry_index)
+                                        {
+                                            entry.on_part_index_changed(part_index, value);
+                                        }
+                                    }
+                                    SaveInventoryInteractionMessage::Bl4PartOptionSelected(
+                                        entry_index,
+                                        part_index,
+                                        choice,
+                                    ) => {
+                                        if let Some(entry) = self
+                                            .manage_save_state
+                                            .save_view_state
+                                            .inventory_state
+                                            .bl4_inventory
+                                            .entries
+                                            .get_mut(entry_index)
+                                        {
+                                            entry.on_part_option_selected(part_index, choice);
+                                        }
+                                    }
+                                    SaveInventoryInteractionMessage::Bl4PartValuesChanged(
+                                        entry_index,
+                                        part_index,
+                                        value,
+                                    ) => {
+                                        if let Some(entry) = self
+                                            .manage_save_state
+                                            .save_view_state
+                                            .inventory_state
+                                            .bl4_inventory
+                                            .entries
+                                            .get_mut(entry_index)
+                                        {
+                                            entry.on_part_values_changed(part_index, value);
+                                        }
+                                    }
+                                    SaveInventoryInteractionMessage::Bl4RemovePart(
+                                        entry_index,
+                                        part_index,
+                                    ) => {
+                                        if let Some(entry) = self
+                                            .manage_save_state
+                                            .save_view_state
+                                            .inventory_state
+                                            .bl4_inventory
+                                            .entries
+                                            .get_mut(entry_index)
+                                        {
+                                            entry.remove_part(part_index);
+                                        }
+                                    }
+                                    SaveInventoryInteractionMessage::Bl4ApplyAvailablePart(
+                                        entry_index,
+                                        choice,
+                                    ) => {
+                                        if let Some(entry) = self
+                                            .manage_save_state
+                                            .save_view_state
+                                            .inventory_state
+                                            .bl4_inventory
+                                            .entries
+                                            .get_mut(entry_index)
+                                        {
+                                            entry.apply_available_part(&choice);
+                                        }
+                                    }
+                                    SaveInventoryInteractionMessage::Bl4AvailablePartsSearch(
+                                        query,
+                                    ) => {
+                                        self.manage_save_state
+                                            .save_view_state
+                                            .inventory_state
+                                            .bl4_inventory
+                                            .available_parts_search = query;
+                                    }
+                                    SaveInventoryInteractionMessage::Bl4SelectDetailTab(tab) => {
+                                        let inventory_state = &mut self
+                                            .manage_save_state
+                                            .save_view_state
+                                            .inventory_state
+                                            .bl4_inventory;
+                                        inventory_state.detail_tab = tab;
+                                        inventory_state.detail_scroll_state = Default::default();
+                                    }
+                                    SaveInventoryInteractionMessage::Bl4SearchChanged(query) => {
+                                        self.manage_save_state
+                                            .save_view_state
+                                            .inventory_state
+                                            .bl4_inventory
+                                            .search_input = query;
+                                    }
+                                    SaveInventoryInteractionMessage::Bl4DuplicateItem(index) => {
+                                        let inventory_state = &mut self
+                                            .manage_save_state
+                                            .save_view_state
+                                            .inventory_state
+                                            .bl4_inventory;
+                                        if index < inventory_state.entries.len() {
+                                            let base_slot =
+                                                inventory_state.entries[index].slot.clone();
+                                            let base_serial =
+                                                inventory_state.entries[index].serial_input.clone();
+                                            let state_flags =
+                                                inventory_state.entries[index].state_flags;
+
+                                            let mut candidate = format!("{}_copy", base_slot);
+                                            let mut counter = 1;
+                                            while inventory_state
+                                                .entries
+                                                .iter()
+                                                .any(|entry| entry.slot == candidate)
+                                            {
+                                                counter += 1;
+                                                candidate =
+                                                    format!("{}_copy{}", base_slot, counter);
+                                            }
+
+                                            let new_entry = Bl4InventoryEntry::new(
+                                                candidate,
+                                                base_serial,
+                                                state_flags,
+                                            );
+                                            inventory_state.entries.insert(index + 1, new_entry);
+                                            inventory_state
+                                                .list_button_states
+                                                .insert(index + 1, button::State::default());
+                                            inventory_state
+                                                .duplicate_button_states
+                                                .insert(index + 1, button::State::default());
+                                            inventory_state
+                                                .share_button_states
+                                                .insert(index + 1, button::State::default());
+                                            inventory_state
+                                                .delete_button_states
+                                                .insert(index + 1, button::State::default());
+                                            inventory_state.selected_index = Some(index + 1);
+                                            inventory_state.detail_scroll_state =
+                                                Default::default();
+                                        }
+                                    }
+                                    SaveInventoryInteractionMessage::Bl4ShareItem(index) => {
+                                        let inventory_state = &mut self
+                                            .manage_save_state
+                                            .save_view_state
+                                            .inventory_state
+                                            .bl4_inventory;
+                                        if let Some(entry) = inventory_state.entries.get(index) {
+                                            match util::set_clipboard_contents(
+                                                entry.serial_input.clone(),
+                                            ) {
+                                                Ok(_) => {
+                                                    self.notification = Some(Notification::new(
+                                                        "Serial copied to clipboard.".to_string(),
+                                                        NotificationSentiment::Positive,
+                                                    ));
+                                                }
+                                                Err(e) => {
+                                                    let msg = format!(
+                                                        "Failed to copy serial to clipboard: {}",
+                                                        e
+                                                    );
+                                                    error!("{}", msg);
+                                                    self.notification = Some(Notification::new(
+                                                        msg,
+                                                        NotificationSentiment::Negative,
+                                                    ));
+                                                }
+                                            }
+                                        }
+                                    }
+                                    SaveInventoryInteractionMessage::Bl4LootlemonSearchChanged(
+                                        query,
+                                    ) => {
+                                        let inventory_state = &mut self
+                                            .manage_save_state
+                                            .save_view_state
+                                            .inventory_state
+                                            .bl4_inventory;
+                                        inventory_state.lootlemon_search = query;
+                                        let results = bl4::search_artifact_catalog(
+                                            &inventory_state.lootlemon_search,
+                                            60,
+                                        );
+                                        inventory_state.lootlemon_results = results;
+                                        inventory_state.lootlemon_import_button_states = vec![
+                                            button::State::default();
+                                            inventory_state.lootlemon_results.len()
+                                        ];
+                                        inventory_state.lootlemon_open_button_states = vec![
+                                            button::State::default();
+                                            inventory_state.lootlemon_results.len()
+                                        ];
+                                    }
+                                    SaveInventoryInteractionMessage::Bl4LootlemonImport(index) => {
+                                        let inventory_state = &mut self
+                                            .manage_save_state
+                                            .save_view_state
+                                            .inventory_state
+                                            .bl4_inventory;
+                                        if let (Some(selected_idx), Some(catalog)) = (
+                                            inventory_state.selected_index,
+                                            inventory_state.lootlemon_results.get(index),
+                                        ) {
+                                            if let Some(entry) =
+                                                inventory_state.entries.get_mut(selected_idx)
+                                            {
+                                                entry.apply_catalog_item(catalog.clone());
+                                                inventory_state.detail_scroll_state =
+                                                    Default::default();
+                                            }
+                                        }
+                                    }
+                                    SaveInventoryInteractionMessage::Bl4LootlemonOpen(index) => {
+                                        let inventory_state = &mut self
+                                            .manage_save_state
+                                            .save_view_state
+                                            .inventory_state
+                                            .bl4_inventory;
+                                        if let Some(catalog) =
+                                            inventory_state.lootlemon_results.get(index)
+                                        {
+                                            let query = catalog.label().replace(' ', "+");
+                                            let url =
+                                                format!("https://lootlemon.com/search?q={query}");
+                                            return Command::perform(
+                                                interaction::manage_save::item_editor::open_website(
+                                                    url,
+                                                ),
+                                                |_| {
+                                                    Bl3Message::Interaction(
+                                                        InteractionMessage::Ignore,
+                                                    )
+                                                },
+                                            );
+                                        }
+                                    }
                                 }
                             }
                             ManageSaveInteractionMessage::Currency(currency_msg) => {
@@ -694,8 +1647,171 @@ impl Application for Bl3Application {
                                         }
                                     }
                                 }
+                                SaveVehicleInteractionMessage::Bl4PersonalVehicle(value) => {
+                                    self.manage_save_state
+                                        .save_view_state
+                                        .vehicle_state
+                                        .bl4_personal_vehicle_input = value;
+                                }
+                                SaveVehicleInteractionMessage::Bl4HoverDrive(value) => {
+                                    self.manage_save_state
+                                        .save_view_state
+                                        .vehicle_state
+                                        .bl4_hover_drive_input = value;
+                                }
+                                SaveVehicleInteractionMessage::Bl4VehicleWeaponSlot(value) => {
+                                    self.manage_save_state
+                                        .save_view_state
+                                        .vehicle_state
+                                        .bl4_weapon_slot_input = value;
+                                }
+                                SaveVehicleInteractionMessage::Bl4VehicleCosmetic(value) => {
+                                    self.manage_save_state
+                                        .save_view_state
+                                        .vehicle_state
+                                        .bl4_vehicle_cosmetic_input = value;
+                                }
+                                SaveVehicleInteractionMessage::Bl4UnlockableToggle {
+                                    category,
+                                    entry,
+                                    enabled,
+                                } => {
+                                    let category_state = self
+                                        .manage_save_state
+                                        .save_view_state
+                                        .vehicle_state
+                                        .bl4_unlockables
+                                        .entry(category.clone())
+                                        .or_insert_with(Bl4UnlockableCategoryState::default);
+                                    if enabled {
+                                        category_state.entries.insert(entry.clone());
+                                    } else {
+                                        category_state.entries.remove(&entry);
+                                    }
+                                    category_state.known_entries.insert(entry);
+                                }
+                                SaveVehicleInteractionMessage::Bl4UnlockableToggleAll {
+                                    category,
+                                    enable,
+                                } => {
+                                    let category_state = self
+                                        .manage_save_state
+                                        .save_view_state
+                                        .vehicle_state
+                                        .bl4_unlockables
+                                        .entry(category.clone())
+                                        .or_insert_with(Bl4UnlockableCategoryState::default);
+                                    if enable {
+                                        if category_state.known_entries.is_empty() {
+                                            // nothing new to add; keep current entries as-is
+                                        } else {
+                                            category_state.entries =
+                                                category_state.known_entries.clone();
+                                        }
+                                    } else {
+                                        category_state.entries.clear();
+                                    }
+                                }
                             },
                             ManageSaveInteractionMessage::SaveFilePressed => {
+                                if self.manage_save_state.bl4_file.is_some() {
+                                    let Some(steamid) = self.config.bl4_user_id() else {
+                                        let msg = "Cannot save BL4 file: configure a Borderlands 4 user ID in Settings.";
+                                        error!("{}", msg);
+                                        self.notification = Some(Notification::new(
+                                            msg.to_string(),
+                                            NotificationSentiment::Negative,
+                                        ));
+                                        return Command::none();
+                                    };
+
+                                    let edits =
+                                        manage_save::bl4::build_edit_state(&self.manage_save_state);
+
+                                    let current_bl4 =
+                                        self.manage_save_state.bl4_file.clone().unwrap();
+                                    let mut working = current_bl4;
+                                    working.summary.file_name = self
+                                        .manage_save_state
+                                        .save_view_state
+                                        .general_state
+                                        .filename_input
+                                        .clone();
+
+                                    if let Err(e) = bl4::apply_edit_state(&mut working.yaml, &edits)
+                                    {
+                                        let msg = format!(
+                                            "Failed to prepare BL4 save: {}",
+                                            e.to_string()
+                                        );
+                                        error!("{}", msg);
+                                        self.notification = Some(Notification::new(
+                                            msg,
+                                            NotificationSentiment::Negative,
+                                        ));
+                                        return Command::none();
+                                    }
+
+                                    let updated_summary = bl4::summarize_from_value(
+                                        Path::new(&working.summary.file_name),
+                                        &working.yaml,
+                                    );
+                                    working.summary = updated_summary;
+
+                                    let encrypted =
+                                        match bl4::yaml_to_encrypted_sav(&working.yaml, steamid) {
+                                            Ok(bytes) => bytes,
+                                            Err(e) => {
+                                                let msg = format!(
+                                                    "Failed to encrypt Borderlands 4 save: {}",
+                                                    e.to_string()
+                                                );
+                                                error!("{}", msg);
+                                                self.notification = Some(Notification::new(
+                                                    msg,
+                                                    NotificationSentiment::Negative,
+                                                ));
+                                                return Command::none();
+                                            }
+                                        };
+
+                                    let label_string = working
+                                        .summary
+                                        .char_name
+                                        .clone()
+                                        .filter(|s| !s.is_empty())
+                                        .unwrap_or_else(|| working.summary.file_name.clone());
+
+                                    let output_file =
+                                        self.config.saves_dir().join(&working.summary.file_name);
+
+                                    let backup_dir = self.config.backup_dir().to_path_buf();
+                                    let saved_clone = working.clone();
+
+                                    self.manage_save_state.bl4_file = Some(working.clone());
+                                    manage_save::bl4::map_summary_to_states(
+                                        &mut self.manage_save_state,
+                                        &working.summary,
+                                    );
+
+                                    return Command::perform(
+                                        interaction::file_save::save_bl4_file(
+                                            backup_dir,
+                                            output_file,
+                                            encrypted,
+                                            label_string.clone(),
+                                        ),
+                                        move |r| match r {
+                                            Ok(()) => Bl3Message::Bl4SaveCompleted(
+                                                MessageResult::Success(saved_clone.clone()),
+                                            ),
+                                            Err(e) => Bl3Message::Bl4SaveCompleted(
+                                                MessageResult::Error(e.to_string()),
+                                            ),
+                                        },
+                                    );
+                                }
+
                                 //Lets not make any modifications to the current file just in case we have any errors
                                 let mut current_file = self.manage_save_state.current_file.clone();
 
@@ -1153,6 +2269,395 @@ impl Application for Bl3Application {
                         }
                     }
                     InteractionMessage::SettingsInteraction(settings_msg) => match settings_msg {
+                        SettingsInteractionMessage::Bl4SteamIdChanged(value) => {
+                            self.settings_state.bl4_steamid = value;
+                        }
+                        SettingsInteractionMessage::Bl4SavInputChanged(value) => {
+                            self.settings_state.bl4_sav_input = value.clone();
+                            if self.settings_state.bl4_yaml_output.is_empty()
+                                && !value.trim().is_empty()
+                            {
+                                let mut default = PathBuf::from(value.trim());
+                                default.set_extension("yaml");
+                                self.settings_state.bl4_yaml_output =
+                                    default.to_string_lossy().to_string();
+                            }
+                        }
+                        SettingsInteractionMessage::Bl4YamlOutputChanged(value) => {
+                            self.settings_state.bl4_yaml_output = value;
+                        }
+                        SettingsInteractionMessage::Bl4YamlInputChanged(value) => {
+                            self.settings_state.bl4_yaml_input = value.clone();
+                            if self.settings_state.bl4_sav_output.is_empty()
+                                && !value.trim().is_empty()
+                            {
+                                let mut default = PathBuf::from(value.trim());
+                                default.set_extension("sav");
+                                self.settings_state.bl4_sav_output =
+                                    default.to_string_lossy().to_string();
+                            }
+                        }
+                        SettingsInteractionMessage::Bl4SavOutputChanged(value) => {
+                            self.settings_state.bl4_sav_output = value;
+                        }
+
+                        SettingsInteractionMessage::Bl4SelectSavInput => {
+                            let hint = self.settings_state.bl4_sav_input.trim().to_string();
+                            let initial = if hint.is_empty() {
+                                None
+                            } else {
+                                Some(PathBuf::from(&hint))
+                            };
+
+                            return Command::perform(
+                                interaction::settings::choose_file(
+                                    initial,
+                                    &[("Borderlands 4 Saves", &["sav"])],
+                                ),
+                                |res| {
+                                    Bl3Message::Interaction(
+                                        InteractionMessage::SettingsInteraction(
+                                            SettingsInteractionMessage::Bl4SelectSavInputCompleted(
+                                                MessageResult::handle_result(
+                                                    res.map(|p| p.to_string_lossy().to_string()),
+                                                ),
+                                            ),
+                                        ),
+                                    )
+                                },
+                            );
+                        }
+                        SettingsInteractionMessage::Bl4SelectSavInputCompleted(result) => {
+                            match result {
+                                MessageResult::Success(path) => {
+                                    self.settings_state.bl4_sav_input = path.clone();
+
+                                    if self.settings_state.bl4_yaml_output.trim().is_empty() {
+                                        let mut default = PathBuf::from(&path);
+                                        default.set_extension("yaml");
+                                        self.settings_state.bl4_yaml_output =
+                                            default.to_string_lossy().to_string();
+                                    }
+                                }
+                                MessageResult::Error(e) => {
+                                    if e != "No file was selected." {
+                                        self.notification = Some(Notification::new(
+                                            format!(
+                                                "Failed to select Borderlands 4 save file: {}",
+                                                e
+                                            ),
+                                            NotificationSentiment::Negative,
+                                        ));
+                                    }
+                                }
+                            }
+                        }
+                        SettingsInteractionMessage::Bl4SelectYamlInput => {
+                            let hint = self.settings_state.bl4_yaml_input.trim().to_string();
+                            let initial = if hint.is_empty() {
+                                None
+                            } else {
+                                Some(PathBuf::from(&hint))
+                            };
+
+                            return Command::perform(
+                                interaction::settings::choose_file(initial, &[("YAML", &["yaml"])]),
+                                |res| {
+                                    Bl3Message::Interaction(
+                                        InteractionMessage::SettingsInteraction(
+                                            SettingsInteractionMessage::Bl4SelectYamlInputCompleted(
+                                                MessageResult::handle_result(
+                                                    res.map(|p| p.to_string_lossy().to_string()),
+                                                ),
+                                            ),
+                                        ),
+                                    )
+                                },
+                            );
+                        }
+                        SettingsInteractionMessage::Bl4SelectYamlInputCompleted(result) => {
+                            match result {
+                                MessageResult::Success(path) => {
+                                    self.settings_state.bl4_yaml_input = path.clone();
+
+                                    if self.settings_state.bl4_sav_output.trim().is_empty() {
+                                        let mut default = PathBuf::from(&path);
+                                        default.set_extension("sav");
+                                        self.settings_state.bl4_sav_output =
+                                            default.to_string_lossy().to_string();
+                                    }
+                                }
+                                MessageResult::Error(e) => {
+                                    if e != "No file was selected." {
+                                        self.notification = Some(Notification::new(
+                                            format!(
+                                                "Failed to select Borderlands 4 YAML file: {}",
+                                                e
+                                            ),
+                                            NotificationSentiment::Negative,
+                                        ));
+                                    }
+                                }
+                            }
+                        }
+                        SettingsInteractionMessage::Bl4DecodeSerialsToggled(checked) => {
+                            self.settings_state.bl4_decode_serials = checked;
+                        }
+                        SettingsInteractionMessage::Bl4EncodeSerialsToggled(checked) => {
+                            self.settings_state.bl4_encode_serials = checked;
+                        }
+                        SettingsInteractionMessage::Bl4Decrypt => {
+                            if self.settings_state.bl4_decrypt_in_progress {
+                                return Command::none();
+                            }
+
+                            let steamid = self.settings_state.bl4_steamid.trim().to_string();
+                            if steamid.is_empty() {
+                                let msg = "Borderlands 4 decrypt requires a Steam ID.".to_string();
+                                error!("{}", msg);
+                                self.notification =
+                                    Some(Notification::new(msg, NotificationSentiment::Negative));
+                                return Command::none();
+                            }
+
+                            let sav_input = self.settings_state.bl4_sav_input.trim().to_string();
+                            if sav_input.is_empty() {
+                                let msg = "Select a Borderlands 4 save file before decrypting."
+                                    .to_string();
+                                error!("{}", msg);
+                                self.notification =
+                                    Some(Notification::new(msg, NotificationSentiment::Negative));
+                                return Command::none();
+                            }
+
+                            if !Path::new(&sav_input).exists() {
+                                let msg =
+                                    "Borderlands 4 save file does not exist at the provided path."
+                                        .to_string();
+                                error!("{}", msg);
+                                self.notification =
+                                    Some(Notification::new(msg, NotificationSentiment::Negative));
+                                return Command::none();
+                            }
+
+                            let mut yaml_output =
+                                self.settings_state.bl4_yaml_output.trim().to_string();
+                            if yaml_output.is_empty() {
+                                let mut default = PathBuf::from(&sav_input);
+                                default.set_extension("yaml");
+                                yaml_output = default.to_string_lossy().to_string();
+                                self.settings_state.bl4_yaml_output = yaml_output.clone();
+                            }
+
+                            let decode_serials = self.settings_state.bl4_decode_serials;
+                            self.settings_state.bl4_steamid = steamid.clone();
+                            self.settings_state.bl4_sav_input = sav_input.clone();
+                            self.settings_state.bl4_decrypt_in_progress = true;
+
+                            let input_path = PathBuf::from(&sav_input);
+                            let output_path = PathBuf::from(&yaml_output);
+                            let output_path_clone = output_path.to_string_lossy().to_string();
+
+                            self.config.set_bl4_user_id(Some(steamid.clone()));
+
+                            let save_command = Command::perform(self.config.clone().save(), |r| {
+                                Bl3Message::Config(ConfigMessage::SaveCompleted(
+                                    MessageResult::handle_result(r),
+                                ))
+                            });
+
+                            let decrypt_command = Command::perform(
+                                interaction::settings::bl4_decrypt(
+                                    input_path,
+                                    output_path.clone(),
+                                    steamid,
+                                    decode_serials,
+                                ),
+                                move |res| {
+                                    Bl3Message::Interaction(
+                                        InteractionMessage::SettingsInteraction(
+                                            SettingsInteractionMessage::Bl4DecryptCompleted(
+                                                output_path_clone.clone(),
+                                                decode_serials,
+                                                MessageResult::handle_result(res),
+                                            ),
+                                        ),
+                                    )
+                                },
+                            );
+
+                            return Command::batch(vec![save_command, decrypt_command]);
+                        }
+                        SettingsInteractionMessage::Bl4DecryptCompleted(
+                            output_path,
+                            decode_serials,
+                            res,
+                        ) => {
+                            self.settings_state.bl4_decrypt_in_progress = false;
+
+                            match res {
+                                MessageResult::Success(outcome) => {
+                                    let message = match outcome {
+                                        DecryptOutcome::WithDecoded { decoded_count } => format!(
+                                            "BL4 decrypt wrote {} with {} decoded item serials.",
+                                            output_path, decoded_count
+                                        ),
+                                        DecryptOutcome::Plain => {
+                                            if decode_serials {
+                                                format!(
+                                                    "BL4 decrypt wrote {} (no item serials found to decode).",
+                                                    output_path
+                                                )
+                                            } else {
+                                                format!("BL4 decrypt wrote {}.", output_path)
+                                            }
+                                        }
+                                    };
+
+                                    self.notification = Some(Notification::new(
+                                        message,
+                                        NotificationSentiment::Positive,
+                                    ));
+                                }
+                                MessageResult::Error(e) => {
+                                    let msg =
+                                        format!("Failed to decrypt Borderlands 4 save: {}", e);
+                                    error!("{}", msg);
+                                    self.notification = Some(Notification::new(
+                                        msg,
+                                        NotificationSentiment::Negative,
+                                    ));
+                                }
+                            }
+                        }
+                        SettingsInteractionMessage::Bl4Encrypt => {
+                            if self.settings_state.bl4_encrypt_in_progress {
+                                return Command::none();
+                            }
+
+                            let steamid = self.settings_state.bl4_steamid.trim().to_string();
+                            if steamid.is_empty() {
+                                let msg = "Borderlands 4 encrypt requires a Steam ID.".to_string();
+                                error!("{}", msg);
+                                self.notification =
+                                    Some(Notification::new(msg, NotificationSentiment::Negative));
+                                return Command::none();
+                            }
+
+                            let yaml_input = self.settings_state.bl4_yaml_input.trim().to_string();
+                            if yaml_input.is_empty() {
+                                let msg = "Select a Borderlands 4 YAML file before encrypting."
+                                    .to_string();
+                                error!("{}", msg);
+                                self.notification =
+                                    Some(Notification::new(msg, NotificationSentiment::Negative));
+                                return Command::none();
+                            }
+
+                            if !Path::new(&yaml_input).exists() {
+                                let msg =
+                                    "Borderlands 4 YAML file does not exist at the provided path."
+                                        .to_string();
+                                error!("{}", msg);
+                                self.notification =
+                                    Some(Notification::new(msg, NotificationSentiment::Negative));
+                                return Command::none();
+                            }
+
+                            let mut sav_output =
+                                self.settings_state.bl4_sav_output.trim().to_string();
+                            if sav_output.is_empty() {
+                                let mut default = PathBuf::from(&yaml_input);
+                                default.set_extension("sav");
+                                sav_output = default.to_string_lossy().to_string();
+                                self.settings_state.bl4_sav_output = sav_output.clone();
+                            }
+
+                            let encode_serials = self.settings_state.bl4_encode_serials;
+                            self.settings_state.bl4_steamid = steamid.clone();
+                            self.settings_state.bl4_yaml_input = yaml_input.clone();
+                            self.settings_state.bl4_encrypt_in_progress = true;
+
+                            let input_path = PathBuf::from(&yaml_input);
+                            let output_path = PathBuf::from(&sav_output);
+                            let output_path_clone = output_path.to_string_lossy().to_string();
+
+                            self.config.set_bl4_user_id(Some(steamid.clone()));
+
+                            let save_command = Command::perform(self.config.clone().save(), |r| {
+                                Bl3Message::Config(ConfigMessage::SaveCompleted(
+                                    MessageResult::handle_result(r),
+                                ))
+                            });
+
+                            let encrypt_command = Command::perform(
+                                interaction::settings::bl4_encrypt(
+                                    input_path,
+                                    output_path.clone(),
+                                    steamid,
+                                    encode_serials,
+                                ),
+                                move |res| {
+                                    Bl3Message::Interaction(
+                                        InteractionMessage::SettingsInteraction(
+                                            SettingsInteractionMessage::Bl4EncryptCompleted(
+                                                output_path_clone.clone(),
+                                                encode_serials,
+                                                MessageResult::handle_result(res),
+                                            ),
+                                        ),
+                                    )
+                                },
+                            );
+
+                            return Command::batch(vec![save_command, encrypt_command]);
+                        }
+                        SettingsInteractionMessage::Bl4EncryptCompleted(
+                            output_path,
+                            encode_serials,
+                            res,
+                        ) => {
+                            self.settings_state.bl4_encrypt_in_progress = false;
+
+                            match res {
+                                MessageResult::Success(outcome) => {
+                                    let message = match outcome {
+                                        EncryptOutcome::Reencoded => format!(
+                                            "BL4 encrypt wrote {} with re-encoded item serials.",
+                                            output_path
+                                        ),
+                                        EncryptOutcome::NoDecodedSection => format!(
+                                            "BL4 encrypt wrote {} (no decoded items section found).",
+                                            output_path
+                                        ),
+                                        EncryptOutcome::Plain => {
+                                            if encode_serials {
+                                                format!(
+                                                    "BL4 encrypt wrote {}.",
+                                                    output_path
+                                                )
+                                            } else {
+                                                format!("BL4 encrypt wrote {}.", output_path)
+                                            }
+                                        }
+                                    };
+
+                                    self.notification = Some(Notification::new(
+                                        message,
+                                        NotificationSentiment::Positive,
+                                    ));
+                                }
+                                MessageResult::Error(e) => {
+                                    let msg =
+                                        format!("Failed to encrypt Borderlands 4 YAML: {}", e);
+                                    error!("{}", msg);
+                                    self.notification = Some(Notification::new(
+                                        msg,
+                                        NotificationSentiment::Negative,
+                                    ));
+                                }
+                            }
+                        }
                         SettingsInteractionMessage::OpenConfigDir => {
                             return Command::perform(
                                 interaction::settings::open_dir(
@@ -1284,17 +2789,42 @@ impl Application for Bl3Application {
                             match choose_dir_res {
                                 MessageResult::Success(dir) => {
                                     self.view_state = ViewState::Loading;
+                                    // Prefer the in-memory Settings steamid, falling back to persisted config
+                                    let effective_bl4_id = if !self
+                                        .settings_state
+                                        .bl4_steamid
+                                        .trim()
+                                        .is_empty()
+                                    {
+                                        Some(self.settings_state.bl4_steamid.trim().to_string())
+                                    } else {
+                                        self.config.bl4_user_id().cloned()
+                                    };
 
-                                    return Command::perform(
+                                    // If the settings value is present, persist it to config
+                                    let mut commands: Vec<Command<Bl3Message>> = Vec::new();
+                                    if let Some(ref sid) = effective_bl4_id {
+                                        self.config.set_bl4_user_id(Some(sid.clone()));
+                                        commands.push(Command::perform(self.config.clone().save(), |r| {
+                                            Bl3Message::Config(ConfigMessage::SaveCompleted(
+                                                MessageResult::handle_result(r),
+                                            ))
+                                        }));
+                                    }
+
+                                    commands.push(Command::perform(
                                         interaction::choose_save_directory::load_files_in_directory(
                                             dir,
+                                            effective_bl4_id,
                                         ),
                                         |r| {
                                             Bl3Message::ChooseSave(ChooseSaveMessage::FilesLoaded(
                                                 MessageResult::handle_result(r),
                                             ))
                                         },
-                                    );
+                                    ));
+
+                                    return Command::batch(commands);
                                 }
                                 MessageResult::Error(e) => {
                                     let msg = format!("Failed to choose saves folder: {}", e);
@@ -1351,6 +2881,7 @@ impl Application for Bl3Application {
                         return Command::perform(
                             interaction::choose_save_directory::load_files_in_directory(
                                 self.config.saves_dir().to_path_buf(),
+                                self.config.bl4_user_id().cloned(),
                             ),
                             |r| {
                                 Bl3Message::ChooseSave(ChooseSaveMessage::FilesLoaded(
@@ -1371,7 +2902,10 @@ impl Application for Bl3Application {
                             self.view_state = ViewState::Loading;
 
                             return Command::perform(
-                                interaction::choose_save_directory::load_files_in_directory(dir),
+                                interaction::choose_save_directory::load_files_in_directory(
+                                    dir,
+                                    self.config.bl4_user_id().cloned(),
+                                ),
                                 |r| {
                                     Bl3Message::ChooseSave(ChooseSaveMessage::FilesLoaded(
                                         MessageResult::handle_result(r),
@@ -1451,6 +2985,7 @@ impl Application for Bl3Application {
                     return Command::perform(
                         interaction::file_save::load_files_after_save(
                             self.config.saves_dir().to_path_buf(),
+                            self.config.bl4_user_id().cloned(),
                             bl3_file_type,
                         ),
                         |r| Bl3Message::FilesLoadedAfterSave(MessageResult::handle_result(r)),
@@ -1458,6 +2993,38 @@ impl Application for Bl3Application {
                 }
                 MessageResult::Error(e) => {
                     let msg = format!("Failed to save file: {}", e);
+
+                    error!("{}", msg);
+
+                    self.notification =
+                        Some(Notification::new(msg, NotificationSentiment::Negative));
+                }
+            },
+            Bl3Message::Bl4SaveCompleted(res) => match res {
+                MessageResult::Success(save) => {
+                    self.notification = Some(Notification::new(
+                        "Successfully saved file!",
+                        NotificationSentiment::Positive,
+                    ));
+
+                    self.is_reloading_saves = true;
+                    self.manage_save_state.bl4_file = Some(save.clone());
+                    manage_save::bl4::map_summary_to_states(
+                        &mut self.manage_save_state,
+                        &save.summary,
+                    );
+
+                    return Command::perform(
+                        interaction::file_save::load_files_after_save(
+                            self.config.saves_dir().to_path_buf(),
+                            self.config.bl4_user_id().cloned(),
+                            Bl3FileType::Bl4Save(save.clone()),
+                        ),
+                        |r| Bl3Message::FilesLoadedAfterSave(MessageResult::handle_result(r)),
+                    );
+                }
+                MessageResult::Error(e) => {
+                    let msg = format!("Failed to save Borderlands 4 file: {}", e);
 
                     error!("{}", msg);
 
@@ -1488,6 +3055,7 @@ impl Application for Bl3Application {
                     return Command::perform(
                         interaction::file_save::load_files_after_save(
                             self.config.saves_dir().to_path_buf(),
+                            self.config.bl4_user_id().cloned(),
                             bl3_file_type,
                         ),
                         |r| Bl3Message::FilesLoadedAfterSave(MessageResult::handle_result(r)),
@@ -1515,7 +3083,9 @@ impl Application for Bl3Application {
                             self.loaded_files_selected = Box::new(selected_file.to_owned());
 
                             match selected_file {
-                                Bl3FileType::PcProfile(_) | Bl3FileType::Ps4Profile(_) => {
+                                Bl3FileType::PcProfile(_)
+                                | Bl3FileType::Ps4Profile(_)
+                                | Bl3FileType::Bl4Save(_) => {
                                     state_mappers::map_loaded_file_to_state(self).handle_ui_error(
                                         "Failed to map loaded file to editor",
                                         &mut self.notification,
@@ -1542,8 +3112,6 @@ impl Application for Bl3Application {
 
                         error!("{}", msg);
 
-                        self.view_state = ViewState::ChooseSaveDirectory;
-
                         self.notification =
                             Some(Notification::new(msg, NotificationSentiment::Negative));
                     }
@@ -1560,7 +3128,13 @@ impl Application for Bl3Application {
     }
 
     fn view(&mut self) -> Element<'_, Self::Message> {
-        let title = Text::new("Borderlands 3 Save Editor".to_uppercase())
+        let banner_title = if self.is_current_bl4() {
+            "Borderlands 4 Save Editor"
+        } else {
+            "Borderlands 3 Save Editor"
+        };
+
+        let title = Text::new(banner_title.to_uppercase())
             .font(JETBRAINS_MONO_NL_EXTRA_BOLD_ITALIC)
             .size(40)
             .color(Color::from_rgb8(242, 203, 5))
@@ -1621,7 +3195,6 @@ impl Application for Bl3Application {
         let manage_profile_discrim = mem::discriminant(&ViewState::ManageProfile(
             ManageProfileView::TabBar(ProfileTabBarView::General),
         ));
-
         let mut save_button = Button::new(
             &mut self.save_file_button_state,
             Text::new("Save").font(JETBRAINS_MONO_BOLD).size(17),
@@ -1650,6 +3223,30 @@ impl Application for Bl3Application {
             menu_bar_editor_content = menu_bar_editor_content.push(all_saves_picklist);
             menu_bar_editor_content = menu_bar_editor_content.push(save_button.into_element());
         }
+
+        // Always show a Settings button (with gear icon), right-aligned
+        let settings_icon = Svg::new(svg::Handle::from_memory(SETTINGS))
+            .height(Length::Units(18))
+            .width(Length::Units(18));
+        let settings_label = Text::new("Settings").font(JETBRAINS_MONO_BOLD).size(18);
+        let settings_btn_content = Row::new()
+            .push(settings_icon)
+            .push(settings_label)
+            .spacing(8)
+            .align_items(Alignment::Center);
+
+        let settings_button_el = Button::new(&mut self.settings_top_button_state, settings_btn_content)
+            .on_press(InteractionMessage::ManageSaveInteraction(
+                ManageSaveInteractionMessage::TabBar(SaveTabBarInteractionMessage::Settings),
+            ))
+            .style(Bl3UiStyle)
+            .padding(8)
+            .into_element();
+
+        // push a spacer before settings to align it to the right
+        menu_bar_editor_content = menu_bar_editor_content
+            .push(Space::with_width(Length::Fill))
+            .push(settings_button_el);
 
         let mut menu_bar_content = Column::new().push(menu_bar_editor_content).spacing(10);
 
